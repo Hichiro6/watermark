@@ -6,7 +6,7 @@ services:
     image: watermark:latest
     container_name: watermark-app
     ports:
-      - "8080:80"
+      - "8088:80"
     volumes:
       - nginx-logs:/var/log/nginx
     labels:
