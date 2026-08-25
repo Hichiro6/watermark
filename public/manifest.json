@@ -1,0 +1,18 @@
+{
+  "name": "WaterMark — Sécurisez vos documents",
+  "short_name": "WaterMark",
+  "description": "Filigrane de sécurité pour documents administratifs. 100% local, vos documents ne quittent jamais votre navigateur.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
