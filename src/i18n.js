@@ -471,22 +471,17 @@ function applyTranslations() {
     ['.header__tagline', 'textContent', 'header.tagline'],
     ['.badge--privacy', 'textContent', 'privacy.badge'],
     ['.footer__links a[data-i18n="privacy.link"]', 'textContent', 'privacy.link'],
+    ['.footer__bmc span[data-i18n="footer.bmc"]', 'textContent', 'footer.bmc'],
     ['#dropzone h2', 'textContent', 'dropzone.title'],
     ['#dropzone p', 'textContent', 'dropzone.subtitle'],
-    ['#controls-presets span', 'textContent', 'controls.presets'],
-    ['#controls.text span', 'textContent', 'controls.text'],
-    ['label[for="watermark-text"]', 'textContent', 'controls.text'],
+    ['#controls-presets > span', 'textContent', 'controls.presets'],
+    ['#controls\\.text > span', 'textContent', 'controls.text'],
     ['#watermark-text', 'placeholder', 'controls.text'],
-    ['label[for="destinataire"]', 'textContent', 'controls.recipient'],
     ['#destinataire', 'placeholder', 'controls.recipient.ph'],
-    ['label[for="usage"]', 'textContent', 'controls.usage'],
     ['#usage', 'placeholder', 'controls.usage.ph'],
-    ['label[for="date-picker"]', 'textContent', 'controls.date.label'],
     ['#date-mode option[value="today"]', 'textContent', 'controls.date.today'],
     ['#date-mode option[value="custom"]', 'textContent', 'controls.date.custom'],
-    ['#controls.appearance span', 'textContent', 'controls.appearance'],
-    ['#btn-download', 'textContent', 'btn.download'],
-    ['#btn-reset', 'textContent', 'btn.reset'],
+    ['#controls\\.appearance > span', 'textContent', 'controls.appearance'],
   ];
 
   map.forEach(([sel, prop, key]) => {
@@ -494,34 +489,48 @@ function applyTranslations() {
     if (el) el[prop] = dict[key];
   });
 
-  // Labels avec valeurs dynamiques (% ou px)
-  const labels = document.querySelectorAll(
-    '.control-field > label:not(:has(.value-badge):first-child) ~ .value-badge',
-  );
-  labels.forEach((badge) => {
-    const prev = badge.previousSibling;
-    if (prev && prev.nodeType === Node.TEXT_NODE) {
-      const text = prev.textContent.trim();
-      if (
-        text.startsWith('O') ||
-        text.startsWith('Op') ||
-        text.startsWith('Ope') ||
-        text.startsWith('D') ||
-        text.startsWith('Deck')
-      ) {
-        prev.textContent = `${dict['controls.opacity']} `;
-      } else if (
-        text.startsWith('T') ||
-        text.startsWith('Ta') ||
-        text.startsWith('Size') ||
-        text.startsWith('Gö')
-      ) {
-        prev.textContent = `${dict['controls.size']} `;
-      } else if (text.startsWith('Ro')) {
-        prev.textContent = `${dict['controls.rotation']} `;
+  // Labels for="..." — cibler par l'attribut for
+  const labelMap = {
+    'watermark-text': 'controls.text',
+    'opacity': 'controls.opacity',
+    'fontsize': 'controls.size',
+    'rotation': 'controls.rotation',
+  };
+  Object.entries(labelMap).forEach(([forId, key]) => {
+    const label = document.querySelector(`label[for="${forId}"]`);
+    if (label) {
+      const span = label.querySelector('span[data-i18n]');
+      if (span) {
+        span.textContent = dict[key];
+      } else {
+        label.textContent = dict[key];
       }
     }
   });
+
+  // Label "Position" et "Color" (sans for)
+  const posLabel = document.querySelector('.control-field label[data-i18n="controls.position"]');
+  if (posLabel) posLabel.textContent = dict['controls.position'];
+  const colorLabel = document.querySelector('.control-field label[data-i18n="controls.color"]');
+  if (colorLabel) colorLabel.textContent = dict['controls.color'];
+
+  // Bouton download — préserver le SVG, mettre à jour le span
+  const dlSpan = document.querySelector('#btn-download span[data-i18n="btn.download"]');
+  if (dlSpan) dlSpan.textContent = dict['btn.download'];
+
+  // Bouton reset — aria-label seulement (pas de texte visible)
+  const resetBtn = document.getElementById('btn-reset');
+  if (resetBtn) resetBtn.setAttribute('aria-label', dict['btn.reset']);
+
+  // Date label et hint
+  const dateLabel = document.querySelector('label[for="date-picker"]');
+  if (dateLabel) dateLabel.textContent = dict['controls.date.label'];
+
+  // Recipient et Usage labels
+  const recLabel = document.querySelector('label[for="destinataire"]');
+  if (recLabel) recLabel.textContent = dict['controls.recipient'];
+  const usageLabel = document.querySelector('label[for="usage"]');
+  if (usageLabel) usageLabel.textContent = dict['controls.usage'];
 
   // Position buttons
   document.querySelectorAll('[data-position]').forEach((btn) => {
