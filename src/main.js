@@ -12,7 +12,7 @@ const state = {
   previewCanvas: null, // pour images (téléchargement image)
   previewCanvases: [], // pour PDF (tous les canvases rendus)
   options: {
-    text: 'Copie pour vérification uniquement\n{date}',
+    text: 'Copy for identity verification only\n{date}',
     position: 'diagonal',
     opacity: 30,
     fontSize: 48,
@@ -165,6 +165,34 @@ function bindEvents() {
   });
 
   // Presets
+  bindPresetButtons();
+
+  // Language change: re-render presets + watermark text
+  document.addEventListener('languagechange', () => {
+    renderPresets();
+    bindPresetButtons();
+    // Update watermark text if a preset is active, otherwise keep custom text
+    const activePreset = elements.presetsGrid.querySelector('.preset-btn.active');
+    if (activePreset) {
+      const preset = PRESETS.find((p) => p.id === activePreset.dataset.preset);
+      if (preset) {
+        const localizedText = getPresetText(preset.id);
+        const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
+        const todayStr = new Date().toLocaleDateString(localeMap[getCurrentLanguage()] || 'en-US');
+        const textWithDate = localizedText.replace(/{date}/g, todayStr);
+        elements.watermarkText.value = textWithDate;
+        state.options.text = textWithDate;
+      }
+    }
+    // Re-render preview with new locale
+    if (state.file) debouncedPreview();
+  });
+}
+
+/**
+ * Liaison des événements sur les boutons de presets
+ */
+function bindPresetButtons() {
   elements.presetsGrid.querySelectorAll('.preset-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       elements.presetsGrid.querySelectorAll('.preset-btn').forEach((b) => {
@@ -174,7 +202,6 @@ function bindEvents() {
       const preset = PRESETS.find((p) => p.id === btn.dataset.preset);
       if (preset) {
         const localizedText = getPresetText(preset.id);
-        // Substitute {date} with today's date automatically
         const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
         const todayStr = new Date().toLocaleDateString(localeMap[getCurrentLanguage()] || 'en-US');
         const textWithDate = localizedText.replace(/{date}/g, todayStr);

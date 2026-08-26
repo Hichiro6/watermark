@@ -72,7 +72,7 @@ export const TRANSLATIONS = {
     'app.title': 'WaterMark — Secure your documents',
     'header.tagline': 'Security watermark for administrative documents',
     'privacy.badge': '🔒 100% local — your documents never leave your browser',
-    'privacy.link': '🔒 100% local — your documents never leave your browser',
+    'privacy.link': 'View on GitHub',
     'dropzone.title': 'Drop your document here',
     'dropzone.subtitle': 'or click to select a file',
     'controls.presets': 'Quick presets',
@@ -97,7 +97,6 @@ export const TRANSLATIONS = {
     'controls.rotation': 'Rotation',
     'btn.download': 'Download',
     'btn.reset': 'New document',
-    'hints.variables': "Variable {date} is replaced with today's date automatically.",
     'alerts.unsupported':
       'Unsupported format. Please choose a PDF or image (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Download error: ',
@@ -110,7 +109,7 @@ export const TRANSLATIONS = {
     'app.title': 'WaterMark — Sécurisez vos documents',
     'header.tagline': 'Filigrane de sécurité pour documents administratifs',
     'privacy.badge': '🔒 100% local — vos documents ne quittent jamais votre navigateur',
-    'privacy.link': '🔒 100% local — vos documents ne quittent jamais votre navigateur',
+    'privacy.link': 'Voir sur GitHub',
     'dropzone.title': 'Déposez votre document ici',
     'dropzone.subtitle': 'ou cliquez pour sélectionner un fichier',
     'controls.presets': 'Modèles rapides',
@@ -135,7 +134,6 @@ export const TRANSLATIONS = {
     'controls.rotation': 'Rotation',
     'btn.download': 'Télécharger',
     'btn.reset': 'Nouveau document',
-    'hints.variables': 'La variable {date} est remplacée automatiquement par la date du jour.',
     'alerts.unsupported':
       'Format non pris en charge. Veuillez choisir un PDF ou une image (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Erreur de téléchargement : ',
@@ -148,7 +146,7 @@ export const TRANSLATIONS = {
     'app.title': 'WaterMark — Sichern Sie Ihre Dokumente',
     'header.tagline': 'Sicherheits-Wasserzeichen für Verwaltungsdokumente',
     'privacy.badge': '🔒 100% lokal — Ihre Dokumente verlassen nie den Browser',
-    'privacy.link': '🔒 100% lokal — Ihre Dokumente verlassen nie den Browser',
+    'privacy.link': 'Auf GitHub ansehen',
     'dropzone.title': 'Dokument hier ablegen',
     'dropzone.subtitle': 'oder klicken, um eine Datei auszuwählen',
     'controls.presets': 'Schnellvorlagen',
@@ -173,7 +171,6 @@ export const TRANSLATIONS = {
     'controls.rotation': 'Rotation',
     'btn.download': 'Herunterladen',
     'btn.reset': 'Neues Dokument',
-    'hints.variables': 'Die Variable {date} wird automatisch durch das heutige Datum ersetzt.',
     'alerts.unsupported':
       'Nicht unterstütztes Format. Bitte wählen Sie ein PDF oder Bild (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Download-Fehler: ',
@@ -186,7 +183,7 @@ export const TRANSLATIONS = {
     'app.title': 'WaterMark — Protege tus documentos',
     'header.tagline': 'Marca de agua de seguridad para documentos administrativos',
     'privacy.badge': '🔒 100% local — tus documentos nunca salen del navegador',
-    'privacy.link': '🔒 100% local — tus documentos nunca salen del navegador',
+    'privacy.link': 'Ver en GitHub',
     'dropzone.title': 'Deja tu documento aquí',
     'dropzone.subtitle': 'o haz clic para seleccionar un archivo',
     'controls.presets': 'Plantillas rápidas',
@@ -211,8 +208,6 @@ export const TRANSLATIONS = {
     'controls.rotation': 'Rotación',
     'btn.download': 'Descargar',
     'btn.reset': 'Nuevo documento',
-    'hints.variables':
-      'Las variables {date}, {destinataire} y {usage} se reemplazan automáticamente.',
     'alerts.unsupported':
       'Formato no compatible. Elige un PDF o imagen (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Error de descarga: ',
@@ -225,7 +220,7 @@ export const TRANSLATIONS = {
     'app.title': 'WaterMark — Proteja seus documentos',
     'header.tagline': "Marca d'água de segurança para documentos administrativos",
     'privacy.badge': '🔒 100% local — seus documentos nunca saem do navegador',
-    'privacy.link': '🔒 100% local — seus documentos nunca saem do navegador',
+    'privacy.link': 'Ver no GitHub',
     'dropzone.title': 'Solte seu documento aqui',
     'dropzone.subtitle': 'ou clique para selecionar um arquivo',
     'controls.presets': 'Modelos rápidos',
@@ -250,8 +245,6 @@ export const TRANSLATIONS = {
     'controls.rotation': 'Rotação',
     'btn.download': 'Baixar',
     'btn.reset': 'Novo documento',
-    'hints.variables':
-      'Variáveis {date}, {destinataire} e {usage} são substituídas automaticamente.',
     'alerts.unsupported':
       'Formato não suportado. Escolha um PDF ou imagem (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Erro de download: ',
@@ -305,6 +298,9 @@ export function setLanguage(lang, onPresetsChanged = null) {
 
   // Callback pour re-rendre les presets
   if (onPresetsChanged) onPresetsChanged();
+
+  // Notifier le reste de l'app du changement de langue
+  document.dispatchEvent(new CustomEvent('languagechange', { detail: { lang } }));
 
   // Déclencher un event input sur le textarea pour refresh
   const wmText = document.getElementById('watermark-text');
@@ -440,20 +436,4 @@ function applyTranslations() {
     const key = `controls.pos.${pos}`;
     btn.textContent = dict[key];
   });
-
-  // Hints
-  const hints = document.querySelectorAll('.control-hint');
-  hints.forEach((hint) => {
-    if (hint.textContent.includes('{date}')) {
-      hint.innerHTML = dict['controls.date.hint'].replace('{date}', '<code>{date}</code>');
-    }
-  });
-
-  const infoP = document.querySelector('.info-box p');
-  if (infoP) {
-    infoP.innerHTML = dict['hints.variables']
-      .replace('{date}', '<code>{date}</code>')
-      .replace('{destinataire}', '<code>{destinataire}</code>')
-      .replace('{usage}', '<code>{usage}</code>');
-  }
 }
