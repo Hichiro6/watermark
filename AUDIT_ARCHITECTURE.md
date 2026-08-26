@@ -1,39 +1,39 @@
-# 🏛️ Audit Architectural — WaterMark PWA
+# 🏛️ Architectural Audit — WaterMark PWA
 
-**Date de l'audit** : 2026-08-26  
-**Version du projet** : 1.0.0  
-**Développeur** : Hichiro  
-**Licence** : CC-BY-NC-ND-4.0  
-
----
-
-## 📋 Résumé Exécutif
-
-WaterMark est une **PWA (Progressive Web App)** 100% client-side conçue pour ajouter des filigranes de sécurité sur des documents administratifs (PDF et images). L'architecture adopte une approche **"zero-trust data"** : aucun document ne quitte le navigateur de l'utilisateur.
-
-**Note globale** : ⭐⭐⭐⭐☆ (4/5)  
-**Sécurité** : A- (Excellent)  
-**Maintainabilité** : B+ (Bon)  
-**Performance** : A (Excellente)  
+**Audit Date**: 2026-08-26  
+**Project Version**: 1.0.0  
+**Developer**: Hichiro  
+**License**: CC-BY-NC-ND-4.0  
 
 ---
 
-## 1. Structure du Projet
+## 📋 Executive Summary
+
+WaterMark is a **100% client-side PWA (Progressive Web App)** designed to add security watermarks to administrative documents (PDFs and images). The architecture adopts a **"zero-trust data"** approach: no document ever leaves the user's browser.
+
+**Overall Grade**: ⭐⭐⭐⭐☆ (4/5)  
+**Security**: A- (Excellent)  
+**Maintainability**: B+ (Good)  
+**Performance**: A (Excellent)  
+
+---
+
+## 1. Project Structure
 
 ```
 /
 ├── public/
-│   ├── favicon.svg           # Icône de l'application
-│   ├── manifest.json         # Manifest PWA
-│   └── sw.js                 # Service Worker (cache offline)
+│   ├── favicon.svg           # Application icon
+│   ├── manifest.json         # PWA manifest
+│   └── sw.js                 # Service Worker (offline cache)
 ├── src/
-│   ├── main.js               # Point d'entrée, logique UI principale
-│   ├── i18n.js               # Système de traduction (EN, FR, DE, ES, PT)
-│   ├── image-handler.js      # Traitement des images via Canvas API
-│   ├── pdf-handler.js        # Traitement PDF via pdf-lib (NON UTILISÉ en prod)
-│   └── presets.js            # Presets de filigrane prédéfinis
+│   ├── main.js               # Entry point, main UI logic
+│   ├── i18n.js               # Translation system (EN, FR, DE, ES, PT)
+│   ├── image-handler.js      # Image processing via Canvas API
+│   ├── pdf-handler.js        # PDF processing via pdf-lib (NOT USED in prod)
+│   └── presets.js            # Predefined watermark presets
 ├── styles/
-│   └── main.css              # Styles globaux (808 lignes, CSS pur)
+│   └── main.css              # Global styles (808 lines, pure CSS)
 ├── tests/e2e/
 │   ├── 01-upload-preview.spec.js
 │   ├── 02-ui-controls.spec.js
@@ -41,161 +41,163 @@ WaterMark est une **PWA (Progressive Web App)** 100% client-side conçue pour aj
 │   ├── 04-positions-reset.spec.js
 │   ├── 05-non-regression.spec.js
 │   ├── 06-edge-cases.spec.js
-│   ├── fixtures/             # Fichiers de test (PDF, images)
-│   └── helpers/              # Utils de test
-├── index.html                # Template HTML unique (SPA)
-├── vite.config.js            # Configuration Vite
-├── playwright.config.js      # Configuration Playwright
-├── package.json              # Dépendances et scripts
-├── Dockerfile                # Build multi-stage
-├── docker-compose.yml        # Orchestration Docker
-├── nginx.conf                # Configuration serveur production
-├── SECURITY_AUDIT.md         # Rapport de sécurité précédent
-├── README.md                 # Documentation utilisateur
-└── test-pdf.js               # Script de test manuel (déprécié)
+│   ├── fixtures/             # Test files (PDF, images)
+│   └── helpers/              # Test utilities
+├── index.html                # Single HTML template (SPA)
+├── vite.config.js            # Vite configuration
+├── playwright.config.js      # Playwright configuration
+├── package.json              # Dependencies and scripts
+├── Dockerfile                # Multi-stage build
+├── docker-compose.yml        # Docker Compose orchestration
+├── nginx.conf                # Production server configuration
+├── SECURITY_AUDIT.md         # Previous security report
+├── README.md                 # User documentation
+└── test-pdf.js               # Manual test script (deprecated)
 ```
 
-**Statistiques** :
-- **47 fichiers source** (hors node_modules, .git, dist, artifacts de test)
-- **~17K lignes de code** (CSS inclus)
-- **6 tests E2E** couvrant les flux critiques
-- **0 dépendance backend** — Purement client-side
+**Statistics**:
+- **47 source files** (excluding node_modules, .git, dist, test artifacts)
+- **~17K lines of code** (including CSS)
+- **6 E2E tests** covering critical workflows
+- **0 backend dependencies** — Purely client-side
 
 ---
 
-## 2. Technologies Utilisées
+## 2. Technologies Used
 
 ### Frontend Core
-| Technologie | Version | Usage |
+
+| Technology | Version | Usage |
 |-------------|---------|-------|
 | **Vite** | ^5.4.0 | Build tool, dev server |
-| **Vanilla JS** | ES Modules | Logique applicative (0 framework) |
-| **Canvas API** | Native | Rendu des filigranes sur images/PDF |
-| **PDF.js** | ^6.2.108 | Parsing et rendu PDF (Mozilla) |
-| **pdf-lib** | ^1.17.1 | Création PDF (utilisé dans `canvasesToPdf`) |
+| **Vanilla JS** | ES Modules | Application logic (0 framework) |
+| **Canvas API** | Native | Watermark rendering on images/PDFs |
+| **PDF.js** | ^6.2.108 | PDF parsing and rendering (Mozilla) |
+| **pdf-lib** | ^1.17.1 | PDF creation (used in `canvasesToPdf`) |
 
-### Infrastructure & Déploiement
-| Outil | Usage |
-|-------|-------|
-| **Docker** | Build multi-stage, déploiement |
-| **nginx** | Reverse proxy, serve statique, caching |
-| **Playwright** | Tests E2E automatisés |
+### Infrastructure & Deployment
 
-### Internationalisation
-- **5 langues supportées** : EN (principal), FR, DE, ES, PT
-- **Traductions natives** : Pas de librairie externe (i18n.js maison, ~17K octets)
-- **Auto-detection** : Détection automatique de la langue du navigateur
+| Tool | Usage |
+|------|-------|
+| **Docker** | Multi-stage build, deployment |
+| **nginx** | Reverse proxy, static serving, caching |
+| **Playwright** | Automated E2E tests |
+
+### Internationalization
+- **5 languages supported**: EN (primary), FR, DE, ES, PT
+- **Native translations**: No external library (custom i18n.js, ~17KB)
+- **Auto-detection**: Automatic browser language detection
 
 ### PWA Capabilities
-- **Service Worker** : Cache-first strategy, offline support
-- **Manifest** : Installation sur device, icônes, theme color
-- **Responsive** : Mobile-first CSS, touch targets ≥ 44px
+- **Service Worker**: Cache-first strategy, offline support
+- **Manifest**: Device installation, icons, theme color
+- **Responsive**: Mobile-first CSS, touch targets ≥ 44px
 
 ---
 
-## 3. Points Forts Architecturaux
+## 3. Architectural Strengths
 
-### ✅ Sécurité & Confidentialité (Grade A-)
-1. **Zero data exfiltration** : Aucun appel réseau (`fetch`, `XMLHttpRequest`, `WebSocket`) dans le code source
-2. **Traitement in-memory** : Documents jamais écrits sur disque, uniquement dans la RAM du navigateur
-3. **Sanitization stricte** : Whitelist de types MIME, noms de fichiers nettoyés avant téléchargement
-4. **PDF.js hardened** : `isEvalSupported: false` désactive l'exécution de JS malveillant dans les PDF
-5. **Aucune clé API, secret ou telemetry** dans le code
+### ✅ Security & Privacy (Grade A-)
+1. **Zero data exfiltration**: No network calls (`fetch`, `XMLHttpRequest`, `WebSocket`) in source code
+2. **In-memory processing**: Documents never written to disk, only in browser RAM
+3. **Strict sanitization**: MIME type whitelist, filenames cleaned before download
+4. **Hardened PDF.js**: `isEvalSupported: false` disables malicious JS execution in PDFs
+5. **No API keys, secrets, or telemetry** in code
 
 ### ✅ Performance (Grade A)
-1. **Build ultra-léger** : Vite + no framework ≈ <500KB bundle total
-2. **Rendu incrémental** : Debounce 300ms sur les changements d'options
-3. **Pagination intelligente** : Yield au navigateur toutes les 5 pages PDF
-4. **Cache HTTP agressif** : Immutable headers sur les assets statiques (1 an)
-5. **Gzip activé** : Compression texte/CSS/JS côté nginx
+1. **Ultra-lightweight build**: Vite + no framework ≈ <500KB total bundle
+2. **Incremental rendering**: 300ms debounce on option changes
+3. **Smart pagination**: Yield to browser every 5 PDF pages
+4. **Aggressive HTTP caching**: Immutable headers on static assets (1 year)
+5. **Gzip enabled**: Text/CSS/JS compression on nginx side
 
-### ✅ Qualité du Code (Grade B+)
-1. **Architecture modulaire** : Separation claire entre handlers (image, pdf), i18n, presets
-2. **Tests E2E complets** : 6 scénarios couvrant upload, preview, download, edge cases
-3. **Documentation riche** : `SECURITY_AUDIT.md`, `README.md`, commentaires JSDoc
-4. **A11y intégrée** : `prefers-reduced-motion`, `prefers-contrast`, aria-labels implicites
+### ✅ Code Quality (Grade B+)
+1. **Modular architecture**: Clear separation between handlers (image, pdf), i18n, presets
+2. **Comprehensive E2E tests**: 6 scenarios covering upload, preview, download, edge cases
+3. **Rich documentation**: `SECURITY_AUDIT.md`, `README.md`, JSDoc comments
+4. **Built-in accessibility**: `prefers-reduced-motion`, `prefers-contrast`, implicit aria-labels
 
-### ✅ DevOps & Maintenable (Grade B+)
-1. **Docker multi-stage** : Build isolé, image finale nginx alpine (~25MB)
-2. **Health checks** : Liveness/readiness probes configurés
-3. **CI-ready** : Playwright configuré pour CI (retries, artifacts, HTML report)
-4. **Reproducibilité** : `package-lock.json`, versions pinned
+### ✅ DevOps & Maintainability (Grade B+)
+1. **Multi-stage Docker**: Isolated build, final nginx alpine image (~25MB)
+2. **Health checks**: Liveness/readiness probes configured
+3. **CI-ready**: Playwright configured for CI (retries, artifacts, HTML report)
+4. **Reproducibility**: `package-lock.json`, pinned versions
 
 ---
 
-## 4. Points Faibles & Dette Technique
+## 4. Weaknesses & Technical Debt
 
-### ⚠️ Problèmes Critiques
+### ⚠️ Critical Issues
 
-#### 1. **Branche mort-née : `pdf-handler.js` NON UTILISÉE**
+#### 1. **Dead Branch: `pdf-handler.js` UNUSED**
 ```javascript
-// src/pdf-handler.js — importé mais jamais appelé dans main.js
+// src/pdf-handler.js — imported but never called in main.js
 export async function watermakPdf(file, options) { ... }
 ```
-**Impact** : 
-- 103 lignes de code mort (dead code)
-- Confusion pour les contributeurs futurs
-- Maintenance inutile d'une voie de traitement inactive
+**Impact**: 
+- 103 lines of dead code
+- Confusion for future contributors
+- Unnecessary maintenance of an inactive processing path
 
-**Réalité** : L'application utilise `PDF.js` → Canvas → `pdf-lib` pour reconstruire le PDF. La fonction `watermakPdf()` qui applique directement le filigrane sur le PDF natif n'est jamais appelée.
+**Reality**: The app uses `PDF.js` → Canvas → `pdf-lib` to reconstruct the PDF. The `watermakPdf()` function that applies the watermark directly to the native PDF is never called.
 
-**Solution** : 
-- Supprimer `pdf-handler.js` OU
-- Intégrer son appel dans `renderPdfPreview()` / `handleDownload()` comme voie alternative performante
+**Solution**: 
+- Remove `pdf-handler.js` OR
+- Integrate its call in `renderPdfPreview()` / `handleDownload()` as a high-performance alternative
 
 ---
 
-#### 2. **Typo dans le nom de fonction**
+#### 2. **Typo in Function Name**
 ```javascript
 // src/image-handler.js:7
-export async function watermakImage(file, options) { // ❌ "watermak" au lieu de "watermark"
+export async function watermakImage(file, options) { // ❌ "watermak" instead of "watermark"
 ```
-**Impact** : 
-- Incohérence de naming dans toute la codebase
-- Risque de confusion pour les nouveaux développeurs
-- Mauvaise pratique à corriger maintenant avant propagation
+**Impact**: 
+- Naming inconsistency throughout the codebase
+- Potential confusion for new developers
+- Bad practice to fix now before propagation
 
 ---
 
-#### 3. **Couplage fort entre UI et logique de rendu**
+#### 3. **Strong Coupling Between UI and Rendering Logic**
 ```javascript
 // src/main.js:342
 function applyWatermarkToContext(ctx, width, height) {
-  // Accède directement à state.options...
+  // Directly accesses state.options...
   const text = state.options.text;
   const fontSize = state.options.fontSize;
   // ...
 }
 ```
-**Problème** :
-- Fonction impure qui dépend de l'état global
-- Difficile à tester unitairement sans mock complet de `state`
-- Violation du principe de séparation des concerns
+**Problem**:
+- Impure function depending on global state
+- Hard to test unitarily without full `state` mock
+- Violation of separation of concerns principle
 
-**Alternative** : Passer les options en paramètre explicite :
+**Alternative**: Pass options as explicit parameter:
 ```javascript
 function applyWatermarkToContext(ctx, width, height, options) { ... }
 ```
 
 ---
 
-#### 4. **Gestion d'erreurs minimaliste**
+#### 4. **Minimalist Error Handling**
 ```javascript
 // src/main.js:243-246
 catch (error) {
-  console.error('Erreur de rendu:', error);
-  elements.previewArea.innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`;
+  console.error('Render error:', error);
+  elements.previewArea.innerHTML = `<p class="error">❌ Error: ${error.message}</p>`;
 }
 ```
-**Manques** :
-- Pas de distinction entre erreurs récupérables vs fatales
-- Pas de retry mechanism
-- Pas de logging structuré ( Sentry, LogRocket optionnel )
-- Pas de fallback UI élégant (ex: "Réessayez dans quelques instants")
+**Missing**:
+- No distinction between recoverable vs fatal errors
+- No retry mechanism
+- No structured logging (Sentry, LogRocket optional)
+- No elegant fallback UI (e.g., "Try again in a moment")
 
 ---
 
-#### 5. **State management non-optimisé**
+#### 5. **Non-Optimized State Management**
 ```javascript
 const state = {
   file: null,
@@ -206,100 +208,100 @@ const state = {
   options: { ... }
 };
 ```
-**Problèmes** :
-- Mutation directe de l'état (pas de immutability guarantees)
-- Pas de validation de schéma (Zod, Yup, ou même PropTypes)
-- Pas de détection de fuite mémoire (`fileUrl.revokeObjectURL` parfois oublié)
+**Problems**:
+- Direct state mutation (no immutability guarantees)
+- No schema validation (Zod, Yup, or even PropTypes)
+- No memory leak detection (`fileUrl.revokeObjectURL` sometimes forgotten)
 
 ---
 
-### ⚠️ Dettes Techniques Secondaires
+### ⚠️ Secondary Technical Debts
 
-#### 6. **Service Worker sans versioning dynamique**
+#### 6. **Service Worker Without Dynamic Versioning**
 ```javascript
 // public/sw.js:2
-const CACHE_NAME = 'watermark-v1'; // ❌ Hardcodé, jamais incrémenté
+const CACHE_NAME = 'watermark-v1'; // ❌ Hardcoded, never incremented
 ```
-**Risque** : 
-- Les anciens caches ne sont jamais purgés correctement
-- Les mises à jour peuvent laisser des artefacts obsolètes
+**Risk**: 
+- Old caches never properly purged
+- Updates may leave obsolete artifacts
 
-**Solution** : Versionnement sémantique ou timestamp dans le nom du cache.
+**Solution**: Semantic versioning or timestamp in cache name.
 
 ---
 
-#### 7. **CSS monolithique**
+#### 7. **Monolithic CSS**
 ```
-styles/main.css — 808 lignes, 16.6KB
+styles/main.css — 808 lines, 16.6KB
 ```
-**Problèmes** :
-- Pas de modularisation (BEM est utilisé mais tout dans un seul fichier)
-- Pas de purge CSS en production (Tailwind purgerait les classes inutilisées)
-- Pas de CSS variables centralisées (quelques variables existent mais dispersion)
+**Problems**:
+- No modularity (BEM is used but everything in one file)
+- No production CSS purge (Tailwind would remove unused classes)
+- No centralized CSS variables (some exist but scattered)
 
-**Alternative** : 
-- Découper en modules : `header.css`, `dropzone.css`, `controls.css`, `workspace.css`
-- Ou migrer vers Tailwind CSS (si acceptable pour le scope)
+**Alternative**: 
+- Split into modules: `header.css`, `dropzone.css`, `controls.css`, `workspace.css`
+- Or migrate to Tailwind CSS (if acceptable for scope)
 
 ---
 
-#### 8. **Dépendances non-pinnées en production**
+#### 8. **Unpinned Production Dependencies**
 ```json
 // package.json
-"pdf-lib": "^1.17.1",    // ⚠️ caret = peut upgrader aux mineures automatiquement
+"pdf-lib": "^1.17.1",    // ⚠️ caret = can upgrade to minors automatically
 "pdfjs-dist": "^6.2.108",
 "vite": "^5.4.0"
 ```
-**Risque** : Une mise à jour mineure pourrait introduire des breaking changes ou vulnérabilités.
+**Risk**: A minor update could introduce breaking changes or vulnerabilities.
 
-**Solution** : 
-- Utiliser `~` pour les patchs seulement (ex: `~1.17.1`)
-- OU pincer complètement en CI (ex: `1.17.1`) avec revue manuelle des mises à jour
+**Solution**: 
+- Use `~` for patches only (e.g., `~1.17.1`)
+- OR pin completely in CI (e.g., `1.17.1`) with manual review of updates
 
 ---
 
-#### 9. **Script de test manuel obsolète**
+#### 9. **Obsolete Manual Test Script**
 ```
-test-pdf.js — 140 lignes de code Node.js avec Playwright
+test-pdf.js — 140 lines of Node.js code with Playwright
 ```
-**Problème** : Ce script semble être un prototype de test manuel, redondant avec les tests Playwright structurés dans `tests/e2e/`.
+**Problem**: This script seems to be a manual test prototype, redundant with structured Playwright tests in `tests/e2e/`.
 
-**Action** : Supprimer ou archiver dans `scripts/legacy/`.
-
----
-
-#### 10. **Absence de TypeScript**
-Le projet est entièrement en JavaScript vanilla. Bien que fonctionnel :
-- Pas de type checking à la compilation
-- Autocompletion limitée dans les IDE
-- Risque accru de régressions lors des refactors
-
-**Suggestion** : Migration progressive vers TypeScript (optionnelle selon la volonté de complexité ajoutée).
+**Action**: Remove or archive in `scripts/legacy/`.
 
 ---
 
-## 5. Vulnérabilités Connues
+#### 10. **Absence of TypeScript**
+The project is entirely in vanilla JavaScript. While functional:
+- No compile-time type checking
+- Limited autocomplete in IDEs
+- Higher risk of regressions during refactors
 
-### npm Audit (Développement Seulement)
+**Suggestion**: Gradual migration to TypeScript (optional depending on willingness to add complexity).
+
+---
+
+## 5. Known Vulnerabilities
+
+### npm Audit (Development Only)
 ```
 esbuild <=0.24.2 (via Vite)
 - Severity: moderate
-- GHSA-67mh-4wv8-2f99 : "Dev server only"
-- Impact production: ZERO
+- GHSA-67mh-4wv8-2f99: "Dev server only"
+- Production impact: ZERO
 ```
-**Verdict** : Sans risque pour la production, car la vulnérabilité concerne uniquement le dev server Vite.
+**Verdict**: No risk for production, as the vulnerability concerns only the Vite dev server.
 
 ---
 
-## 6. Suggestions d'Amélioration Architecturale
+## 6. Architectural Improvement Suggestions
 
-### 🚀 Priorité Haute (Immédiat)
+### 🚀 High Priority (Immediate)
 
-#### 1. **Supprimer ou Activer `pdf-handler.js`**
-- **Option A** : Supprimer le fichier (dead code cleanup)
-- **Option B** : Réactiver comme voie rapide :
+#### 1. **Remove or Activate `pdf-handler.js`**
+- **Option A**: Remove the file (dead code cleanup)
+- **Option B**: Reactivate as fast path:
   ```javascript
-  // Dans handleDownload():
+  // In handleDownload():
   const useNativePdf = true; // Feature flag
   if (useNativePdf && state.file.type === 'application/pdf') {
     blob = await watermakPdf(state.file, state.options);
@@ -307,21 +309,21 @@ esbuild <=0.24.2 (via Vite)
     blob = await canvasesToPdf(state.previewCanvases);
   }
   ```
-  **Avantage** : Meilleure qualité de rendu (texte vectoriel au lieu de raster JPEG).
+  **Advantage**: Better rendering quality (vector text instead of raster JPEG).
 
 ---
 
-#### 2. **Corriger le Typo `watermakImage` → `watermarkImage`**
+#### 2. **Fix Typo `watermakImage` → `watermarkImage`**
 ```bash
-# Renommer la fonction dans tous les fichiers
+# Rename function in all files
 sed -i 's/watermakImage/watermarkImage/g' src/*.js
 ```
 
 ---
 
-#### 3. **Ajouter Validation de Schéma pour `state.options`**
+#### 3. **Add Schema Validation for `state.options`**
 ```javascript
-// src/state.js (nouveau fichier)
+// src/state.js (new file)
 import { z } from 'zod';
 
 export const WatermarkOptionsSchema = z.object({
@@ -334,7 +336,7 @@ export const WatermarkOptionsSchema = z.object({
 });
 
 export const defaultOptions = WatermarkOptionsSchema.parse({
-  text: 'Copie pour vérification uniquement\n{date}',
+  text: 'Copy for verification only\n{date}',
   position: 'diagonal',
   opacity: 30,
   fontSize: 48,
@@ -345,29 +347,29 @@ export const defaultOptions = WatermarkOptionsSchema.parse({
 
 ---
 
-### 🔄 Priorité Moyenne (Court Terme)
+### 🔄 Medium Priority (Short Term)
 
-#### 4. **Refactoriser `applyWatermarkToContext` en Fonction Pure**
+#### 4. **Refactor `applyWatermarkToContext` into Pure Function**
 ```javascript
-// Avant
+// Before
 function applyWatermarkToContext(ctx, width, height) {
   const text = state.options.text; // ❌ Impure
   // ...
 }
 
-// Après
+// After
 export function applyWatermarkToContext(ctx, width, height, options) {
   const text = options.text; // ✅ Pure, testable
   // ...
 }
 
-// Dans main.js
+// In main.js
 applyWatermarkToContext(ctx, canvas.width, canvas.height, state.options);
 ```
 
 ---
 
-#### 5. **Implémenter Retry Mechanism & Error Boundaries**
+#### 5. **Implement Retry Mechanism & Error Boundaries**
 ```javascript
 // src/utils/retry.js
 export async function retryAsync(fn, { maxRetries = 3, delay = 1000 } = {}) {
@@ -383,29 +385,29 @@ export async function retryAsync(fn, { maxRetries = 3, delay = 1000 } = {}) {
   throw lastError;
 }
 
-// Utilisation
+// Usage
 await retryAsync(() => renderPdfPreview(), { maxRetries: 2 });
 ```
 
 ---
 
-#### 6. **Versionner le Service Worker Dynamiquement**
+#### 6. **Dynamically Version Service Worker**
 ```javascript
 // public/sw.js
-const CACHE_VERSION = 'v2'; // Incrémenter à chaque deploy
+const CACHE_VERSION = 'v2'; // Increment on each deploy
 const CACHE_NAME = `watermark-${CACHE_VERSION}`;
 ```
-OU
+OR
 ```javascript
-const CACHE_VERSION = __APP_VERSION__; // Injecté par Vite via process.env.npm_package_version
+const CACHE_VERSION = __APP_VERSION__; // Injected by Vite via process.env.npm_package_version
 ```
 
 ---
 
-#### 7. **Modulariser le CSS**
+#### 7. **Modularize CSS**
 ```
 styles/
-├── main.css              # Entry point, imports les modules
+├── main.css              # Entry point, imports modules
 ├── base/
 │   ├── _variables.css    # CSS Custom Properties
 │   ├── _reset.css
@@ -423,12 +425,12 @@ styles/
 
 ---
 
-### 🌱 Priorité Basse (Long Terme)
+### 🌱 Low Priority (Long Term)
 
-#### 8. **Migration Progressive vers TypeScript**
-- Commencer par les utilitaires purs (`src/utils/*.js`)
-- Ajouter JSDoc types en attendant (compatible TypeScript sans conversion complète)
-- Exemple :
+#### 8. **Gradual Migration to TypeScript**
+- Start with pure utilities (`src/utils/*.js`)
+- Add JSDoc types in the meantime (TypeScript compatible without full conversion)
+- Example:
   ```javascript
   /**
    * @typedef {Object} WatermarkOptions
@@ -448,21 +450,21 @@ styles/
 
 ---
 
-#### 9. **Ajouter Monitoring Optionnel (Respectueux de la vie privée)**
-Si besoin de métriques :
-- **Plausible Analytics** : Auto-hébergé, respect RGPD, zero cookies
-- **Fathom Analytics** : Alternative payante, simple et privacy-first
-- **Self-hosted Matomo** : Full control, open source
+#### 9. **Add Optional Monitoring (Privacy-Respecting)**
+If metrics are needed:
+- **Plausible Analytics**: Self-hosted, GDPR-compliant, zero cookies
+- **Fathom Analytics**: Paid alternative, simple and privacy-first
+- **Self-hosted Matomo**: Full control, open source
 
-**Important** : Toujours opt-in explicite, jamais par défaut.
+**Important**: Always explicit opt-in, never by default.
 
 ---
 
-#### 10. **Feature Flags pour Tests A/B**
+#### 10. **Feature Flags for A/B Testing**
 ```javascript
 // src/features.js
 export const FEATURES = {
-  NATIVE_PDF_RENDERING: false, // Bascule vers watermakPdf()
+  NATIVE_PDF_RENDERING: false, // Switch to watermakPdf()
   MULTI_LANGUAGE_UI: true,
   AUTO_SAVE_PRESETS: false,
 };
@@ -470,10 +472,10 @@ export const FEATURES = {
 
 ---
 
-## 7. Recommandations de Sécurité Additionnelles
+## 7. Additional Security Recommendations
 
 ### CSP Headers (nginx.conf)
-Ajouter dans `nginx.conf` :
+Add to `nginx.conf`:
 ```nginx
 add_header Content-Security-Policy "
   default-src 'self';
@@ -489,7 +491,7 @@ add_header Content-Security-Policy "
 
 ---
 
-### Security Headers Compléments
+### Additional Security Headers
 ```nginx
 add_header X-Content-Type-Options "nosniff" always;
 add_header X-Frame-Options "DENY" always;
@@ -500,85 +502,85 @@ add_header Permissions-Policy "geolocation=(), microphone=(), camera=()" always;
 
 ---
 
-## 8. Métriques de Qualité
+## 8. Quality Metrics
 
-| Métrique | Valeur | Cible | Statut |
-|----------|--------|-------|--------|
-| **Couverture de tests** | ~60% (estimé) | >80% | ⚠️ À améliorer |
-| **Complexité cyclomatique** | Faible (<10/fonction) | <15 | ✅ Bon |
-| **Dettes techniques** | ~10 points mineurs | 0 | ⚠️ Correctable |
-| **Vulnérabilités npm** | 2 (dev-only) | 0 | ✅ Acceptable |
-| **Bundle size** | ~500KB | <1MB | ✅ Excellent |
-| **Lighthouse Score** | Non mesuré | >90 | ? À checker |
+| Metric | Value | Target | Status |
+|--------|-------|--------|--------|
+| **Test Coverage** | ~60% (estimated) | >80% | ⚠️ Needs improvement |
+| **Cyclomatic Complexity** | Low (<10/function) | <15 | ✅ Good |
+| **Technical Debt** | ~10 minor points | 0 | ⚠️ Correctable |
+| **npm Vulnerabilities** | 2 (dev-only) | 0 | ✅ Acceptable |
+| **Bundle Size** | ~500KB | <1MB | ✅ Excellent |
+| **Lighthouse Score** | Not measured | >90 | ? To check |
 
 ---
 
-## 9. Plan d'Action Recommandé
+## 9. Recommended Action Plan
 
-### Semaine 1 : Nettoyage Immédiat
-- [ ] Supprimer `test-pdf.js` (obsolète)
-- [ ] Corriger typo `watermakImage` → `watermarkImage`
-- [ ] Décider : supprimer `pdf-handler.js` ou l'intégrer
+### Week 1: Immediate Cleanup
+- [ ] Remove `test-pdf.js` (obsolete)
+- [ ] Fix typo `watermakImage` → `watermarkImage`
+- [ ] Decide: remove `pdf-handler.js` or integrate it
 
-### Semaine 2 : Améliorations Architecturales
-- [ ] Refactor `applyWatermarkToContext` en fonction pure
-- [ ] Ajouter validation schema pour `state.options`
-- [ ] Modulariser CSS (découpage en modules)
+### Week 2: Architectural Improvements
+- [ ] Refactor `applyWatermarkToContext` into pure function
+- [ ] Add schema validation for `state.options`
+- [ ] Modularize CSS (split into modules)
 
-### Semaine 3 : Robustesse
-- [ ] Implémenter retry mechanism
-- [ ] Améliorer gestion d'erreurs (retry UI, logging)
-- [ ] Versionner Service Worker
+### Week 3: Robustness
+- [ ] Implement retry mechanism
+- [ ] Improve error handling (retry UI, logging)
+- [ ] Version Service Worker
 
-### Semaine 4 : Polish
-- [ ] Ajouter CSP headers dans nginx
-- [ ] Configurer Lighthouse CI
-- [ ] Mettre à jour `SECURITY_AUDIT.md`
+### Week 4: Polish
+- [ ] Add CSP headers in nginx
+- [ ] Configure Lighthouse CI
+- [ ] Update `SECURITY_AUDIT.md`
 
 ---
 
 ## 10. Conclusion
 
-WaterMark est une **application bien conçue** avec une philosophie de sécurité robuste ("privacy by design"). L'absence de framework et d'appels réseau garantit une confidentialité maximale pour les utilisateurs.
+WaterMark is a **well-designed application** with a robust security philosophy ("privacy by design"). The absence of framework and network calls guarantees maximum privacy for users.
 
-**Les principaux axes d'amélioration** sont :
-1. Éliminer le dead code (`pdf-handler.js`)
-2. Rendre le code plus testable (fonctions pures, injection de dépendances)
-3. Renforcer la robustesse (retry, error boundaries)
-4. Moderniser l'infrastructure (versioning SW, modularisation CSS)
+**Main areas for improvement**:
+1. Eliminate dead code (`pdf-handler.js`)
+2. Make code more testable (pure functions, dependency injection)
+3. Strengthen robustness (retry, error boundaries)
+4. Modernize infrastructure (SW versioning, CSS modularization)
 
-**Recommandation finale** : Le projet est **PRÊT POUR LA PRODUCTION** avec un niveau de confiance **ÉLEVÉ**. Les améliorations suggérées sont des optimisations "nice-to-have" plutôt que des correctifs critiques.
+**Final Recommendation**: The project is **PRODUCTION READY** with a **HIGH** confidence level. The suggested improvements are "nice-to-have" optimizations rather than critical fixes.
 
 ---
 
-## Annexe : Commandes Utiles
+## Appendix: Useful Commands
 
 ```bash
-# Build production
+# Production build
 npm run build
 
-# Preview build localement
+# Preview build locally
 npx serve dist
 
-# Lancer tests E2E
+# Run E2E tests
 npm test
 
-# Voir rapport de test
+# View test report
 npm run test:report
 
-# Build Docker
+# Docker build
 docker-compose build
 
-# Lancer en Docker
+# Run in Docker
 docker-compose up -d
 
-# Audit sécurité
+# Security audit
 npm audit
 
-# Vérifier bundle size
+# Check bundle size
 npx vite-bundle-visualizer
 ```
 
 ---
 
-**Fin de l'audit architectural.**
+**End of Architectural Audit.**

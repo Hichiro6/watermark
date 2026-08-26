@@ -111,7 +111,7 @@ Will install vite@8.2.2, which is a breaking change
 // Line 238-243: Strict whitelist validation
 const validTypes = ['application/pdf', 'image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/bmp', 'image/gif'];
 if (!validTypes.includes(file.type)) {
-  alert('Format non pris en charge...');
+  alert('Unsupported format...');
   return;
 }
 ```
@@ -219,7 +219,7 @@ add_header Content-Security-Policy "default-src 'self'; script-src 'self' 'unsaf
 
 1. **Deploy as-is** — No critical security issues found
 2. **Add HTTPS** — Host on Netlify/Vercel/GitHub Pages (free, auto-HTTPS)
-3. **User documentation** — Add notice: "🔒 100% local — rien n'est envoyé"
+3. **User documentation** — Add notice: "🔒 100% local — nothing is uploaded"
 
 ### 🔄 Future Improvements (Non-Critical)
 

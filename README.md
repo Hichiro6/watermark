@@ -1,4 +1,4 @@
-# WaterMark — Sécurisez vos documents administratifs 🛡️
+# WaterMark — Secure Your Administrative Documents 🛡️
 
 <div align="center">
 
@@ -6,43 +6,43 @@
 ![License](https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-red)
 ![Platform](https://img.shields.io/badge/Platform-Web%20(PWA)-green)
 
-**Filigrane de sécurité 100% client-side pour PDF et images**
+**100% client-side security watermarking for PDFs and images**
 
 </div>
 
 ---
 
-## 🔐 Pourquoi WaterMark ?
+## 🔐 Why WaterMark?
 
-Quand vous envoyez vos pièces d'identité, RIB, justificatifs de domicile ou autres documents sensibles par email, il est important d'ajouter un filigrane indiquant :
-- À qui le document est destiné
-- Dans quel contexte il est transmis
-- La date d'émission
+When you send your ID cards, bank statements (RIB/IBAN), proof of address, or other sensitive documents via email, it's important to add a watermark indicating:
+- Who the document is intended for
+- The context of the transfer
+- The date of issuance
 
-WaterMark permet d'ajouter ces mentions de manière **rapide, sécurisée et invisible** — sans jamais envoyer vos documents sur un serveur.
-
----
-
-## ⚡ Caractéristiques principales
-
-- **🔒 100% local** : Vos documents restent sur votre appareil, aucun upload
-- **🌍 Fonctionne partout** : Browser, iOS, Android — rien à installer
-- **📄 Formats supportés** : PDF, JPG, PNG, WEBP, BMP, GIF
-- **⚙️ Presets prêts à l'emploi** : Cas d'usage courants en un clic
-- **🎨 Personnalisable** : Couleur, opacité, taille, position, rotation
-- **💾 PWA installable** : Ajoutez aux favoris ou installez comme une app
-- **🚀 Zéro dépendance serveur** : Open source, auditable, hébergeable partout
+WaterMark lets you add these notices **quickly, securely, and invisibly** — without ever uploading your documents to a server.
 
 ---
 
-## 🚀 Utilisation
+## ⚡ Key Features
 
-### En ligne (recommandé)
-Accédez à l'app depuis n'importe quel navigateur moderne :
-- Desktop : Chrome, Firefox, Safari, Edge
-- Mobile : Safari (iOS), Chrome (Android), Zen Browser
+- **🔒 100% local**: Your documents stay on your device, no uploads
+- **🌍 Works everywhere**: Browser, iOS, Android — nothing to install
+- **📄 Supported formats**: PDF, JPG, PNG, WEBP, BMP, GIF
+- **⚙️ Ready-to-use presets**: Common use cases in one click
+- **🎨 Customizable**: Color, opacity, size, position, rotation
+- **💾 PWA installable**: Add to favorites or install as an app
+- **🚀 Zero server dependency**: Open source, auditable, deployable anywhere
 
-### Installation locale
+---
+
+## 🚀 Usage
+
+### Online (Recommended)
+Access the app from any modern browser:
+- Desktop: Chrome, Firefox, Safari, Edge
+- Mobile: Safari (iOS), Chrome (Android), Zen Browser
+
+### Local Installation
 ```bash
 git clone https://github.com/Hichiro6/watermark.git
 cd watermark
@@ -50,78 +50,78 @@ npm install
 npm run dev
 ```
 
-L'application s'ouvre alors sur `http://localhost:5173`
+The app opens at `http://localhost:5173`
 
-### Production build
+### Production Build
 ```bash
 npm run build
-# Le dossier dist contient tout ce qu'il faut pour déployer
+# The dist folder contains everything needed for deployment
 ```
 
-Vous pouvez héberger le contenu du dossier `dist` sur :
+You can host the contents of the `dist` folder on:
 - GitHub Pages
 - Netlify
 - Vercel
-- N'importe quel serveur statique
+- Any static server
 
-### Avec Docker (recommandé pour la production)
+### With Docker (Recommended for Production)
 
-La conteneurisation Docker permet de déployer facilement l'application n'importe où.
+Docker containerization makes it easy to deploy the application anywhere.
 
-#### Prérequis
+#### Prerequisites
 - Docker ≥ 20.10
 - Docker Compose ≥ 2.0
 
-#### Build et lancement
+#### Build and Launch
 
 ```bash
-# Construire l'image Docker
+# Build the Docker image
 docker compose build
 
-# Lancer le container
+# Launch the container
 docker compose up -d
 
-# Vérifier que l'app est accessible
+# Verify the app is accessible
 curl http://localhost:8080
 
-# Arrêter les containers
+# Stop the containers
 docker compose down
 ```
 
-#### Commandes utiles
+#### Useful Commands
 
 ```bash
-# Voir les logs
+# View logs
 docker compose logs -f
 
-# Redémarrer le service
+# Restart the service
 docker compose restart
 
-# Arrêter et supprimer le container + volume de logs
+# Stop and remove container + log volume
 docker compose down -v
 
-# Construire sans cache (pour un rebuild propre)
+# Build without cache (for a clean rebuild)
 docker compose build --no-cache
 ```
 
-#### Variables d'environnement (optionnel)
+#### Environment Variables (Optional)
 
-Vous pouvez personnaliser le comportement via des variables d'environnement :
+You can customize behavior via environment variables:
 
-| Variable | Description | Valeur par défaut |
-|----------|-------------|-------------------|
-| `NGINX_WORKER_PROCESSES` | Nombre de processus nginx | `auto` |
-| `NGINX_MAX_BODY_SIZE` | Taille maximale des uploads | `10m` |
+| Variable | Description | Default Value |
+|----------|-------------|---------------|
+| `NGINX_WORKER_PROCESSES` | Number of nginx processes | `auto` |
+| `NGINX_MAX_BODY_SIZE` | Maximum upload size | `10m` |
 
-Exemple avec variables personnalisées :
+Example with custom variables:
 ```bash
 NGINX_MAX_BODY_SIZE=50m docker compose up -d
 ```
 
 #### Healthcheck
 
-Le container inclut un healthcheck qui vérifie que l'application répond sur `/index.html`.  
-Statut du healthcheck :
+The container includes a healthcheck that verifies the app responds on `/index.html`.  
+Healthcheck status:
 ```bash
 docker compose ps
 docker inspect --format='{{.State.Health.Status}}' watermark-app
@@ -129,68 +129,68 @@ docker inspect --format='{{.State.Health.Status}}' watermark-app
 
 ---
 
-## 💡 Comment ça marche ?
+## 💡 How It Works
 
-1. **Glissez-déposez** votre document (PDF ou image)
-2. **Choisissez un preset** ou écrivez votre propre texte
-3. **Ajustez l'apparence** (couleur, opacité, position, etc.)
-4. **Téléchargez** le document avec filigrane intégré
+1. **Drag & drop** your document (PDF or image)
+2. **Choose a preset** or write your own text
+3. **Adjust appearance** (color, opacity, position, etc.)
+4. **Download** the document with integrated watermark
 
-> ⚠️ **Important** : Aucun fichier n'est envoyé vers un serveur. Tout est traité localement dans votre navigateur via JavaScript.
-
----
-
-## 🎯 Presets disponibles
-
-| Icône | Nom | Description |
-|-------|-----|-------------|
-| 🪪 | Pièce d'identité | "Copie pour vérification d'identité uniquement — {date}" |
-| 🏦 | RIB / IBAN | "RIB transmis à {destinataire} — Usage unique — {date}" |
-| 🏠 | Justificatif domicile | "Justificatif de domicile pour {destinataire} — {date}" |
-| 🚗 | Permis de conduire | "Copie du permis — usage unique — Transmis à {destinataire} le {date}" |
-| 📄 | Facture / Devis | "Document transmis à {destinataire} — {date}" |
-| ⚕️ | Document médical | "Document médical — usage strictement privé — Ne pas diffuser — {date}" |
-
-### Variables dynamiques
-- `{date}` → Remplacé automatiquement par la date du jour
-- `{destinataire}` → Champ libre (nom de l'organisme)
-- `{usage}` → Objet du transfert
+> ⚠️ **Important**: No files are sent to a server. Everything is processed locally in your browser via JavaScript.
 
 ---
 
-## 🛠️ Stack technique
+## 🎯 Available Presets
 
-| Rôle | Technologie |
-|------|-------------|
+| Icon | Name | Description |
+|------|------|-------------|
+| 🪪 | ID Card | "Copy for identity verification only — {date}" |
+| 🏦 | Bank Statement (RIB/IBAN) | "Bank statement sent to {recipient} — Single use — {date}" |
+| 🏠 | Proof of Address | "Proof of address for {recipient} — {date}" |
+| 🚗 | Driver's License | "Driver's license copy — Single use — Sent to {recipient} on {date}" |
+| 📄 | Invoice / Quote | "Document sent to {recipient} — {date}" |
+| ⚕️ | Medical Document | "Medical document — Strictly private — Do not distribute — {date}" |
+
+### Dynamic Variables
+- `{date}` → Automatically replaced with today's date
+- `{recipient}` → Free text field (organization name)
+- `{usage}` → Purpose of the transfer
+
+---
+
+## 🛠️ Tech Stack
+
+| Role | Technology |
+|------|------------|
 | Framework | Vite (vanilla JS) |
-| PDF manipulation | pdf-lib |
-| Rendu Canvas | HTML5 Canvas API natif |
+| PDF Manipulation | pdf-lib |
+| Canvas Rendering | Native HTML5 Canvas API |
 | PWA | Service Worker + Web App Manifest |
-| Styling | CSS3 moderne (variables CSS) |
+| Styling | Modern CSS3 (CSS Variables) |
 | Build | Vite |
 
 ---
 
-## 📁 Structure du projet
+## 📁 Project Structure
 
 ```
 watermark/
-├── index.html              # Page principale
+├── index.html              # Main page
 ├── src/
-│   ├── main.js             # Orchestrateur principal
-│   ├── presets.js          # Présents de filigranes
-│   ├── image-handler.js    # Traitement des images
-│   └── pdf-handler.js      # Traitement des PDF
+│   ├── main.js             # Main orchestrator
+│   ├── presets.js          # Watermark presets
+│   ├── image-handler.js    # Image processing
+│   └── pdf-handler.js      # PDF processing
 ├── styles/
-│   └── main.css            # Styles globaux
+│   └── main.css            # Global styles
 ├── public/
-│   ├── manifest.json       # Configuration PWA
+│   ├── manifest.json       # PWA configuration
 │   ├── sw.js               # Service Worker (offline)
 │   └── favicon.svg         # Logo
-├── Dockerfile              # Image Docker multi-stage
-├── docker-compose.yml      # Orchestration Docker Compose
-├── .dockerignore           # Fichiers exclus du build Docker
-├── nginx.conf              # Configuration nginx
+├── Dockerfile              # Multi-stage Docker image
+├── docker-compose.yml      # Docker Compose orchestration
+├── .dockerignore           # Files excluded from Docker build
+├── nginx.conf              # Nginx configuration
 ├── LICENSE                 # CC BY-NC-ND 4.0
 ├── README.md
 └── package.json
@@ -198,62 +198,62 @@ watermark/
 
 ---
 
-## 📝 Licence
+## 📝 License
 
-**CC BY-NC-ND 4.0** — Attribution - Pas d'Utilisation Commerciale - Pas de Modification
+**CC BY-NC-ND 4.0** — Attribution - NonCommercial - NoDerivatives
 
-- ✅ Usage personnel autorisé
-- ✅ Attribution requise (Hichiro / Hichiro6)
-- ❌ Pas d'usage commercial
-- ❌ Pas de modification du code
-- ❌ Pas de reproduction sans attribution
+- ✅ Personal use allowed
+- ✅ Attribution required (Hichiro / Hichiro6)
+- ❌ No commercial use
+- ❌ No modifications allowed
+- ❌ No redistribution without attribution
 
-Voir [LICENSE](LICENSE) pour le texte complet.
+See [LICENSE](LICENSE) for the full text.
 
 ---
 
-## 🤝 Contribuer
+## 🤝 Contributing
 
-Les contributions sont les bienvenues pour :
-- Améliorations de l'UI/UX
-- Support de nouveaux formats (DOCX, etc.)
-- Optimisations de performance
-- Traductions
+Contributions are welcome for:
+- UI/UX improvements
+- New format support (DOCX, etc.)
+- Performance optimizations
+- Translations
 
-⚠️ Attention : Toute contribution doit respecter la licence CC BY-NC-ND 4.0.
+⚠️ Note: All contributions must comply with the CC BY-NC-ND 4.0 license.
 
 ---
 
 ## 🙋 FAQ
 
-**Q : Mes documents sont-ils vraiment locaux ?**  
-R : Oui, absolument. Aucun appel réseau n'est fait après le chargement initial de la page. Tout est exécuté localement dans votre navigateur.
+**Q: Are my documents really processed locally?**  
+A: Yes, absolutely. No network calls are made after the initial page load. Everything executes locally in your browser.
 
-**Q : Puis-je utiliser cette app sans internet ?**  
-R : Oui ! Une fois la page chargée, le Service Worker cache tous les assets. Vous pouvez même ajouter l'app à votre écran d'accueil (PWA) et l'utiliser hors-ligne.
+**Q: Can I use this app without internet?**  
+A: Yes! Once the page loads, the Service Worker caches all assets. You can even add the app to your home screen (PWA) and use it offline.
 
-**Q : Quels navigateurs sont supportés ?**  
-R : Tous les navigateurs modernes (Chrome, Firefox, Safari, Edge, Opera). iOS : Safari 14+. Android : Chrome 80+.
+**Q: Which browsers are supported?**  
+A: All modern browsers (Chrome, Firefox, Safari, Edge, Opera). iOS: Safari 14+. Android: Chrome 80+.
 
-**Q : Existe-t-il une version mobile ?**  
-R : L'app est responsive et peut être "installée" comme une app native via "Ajouter à l'écran d'accueil" sur iOS et Android.
+**Q: Is there a mobile version?**  
+A: The app is responsive and can be "installed" as a native app via "Add to Home Screen" on iOS and Android.
 
-**Q : Peut-on changer les couleurs du filigrane ?**  
-R : Oui, 5 couleurs pré-définies sont proposées (rouge, bleu, vert, violet, noir). Plus de personnalisations sont prévues.
+**Q: Can I change the watermark colors?**  
+A: Yes, 5 predefined colors are available (red, blue, green, purple, black). More customization options are planned.
 
 ---
 
 ## 📧 Contact
 
-Développé par **Hichiro** (GitHub: [@Hichiro6](https://github.com/Hichiro6))
+Developed by **Hichiro** (GitHub: [@Hichiro6](https://github.com/Hichiro6))
 
-Issues et PRs sur GitHub : https://github.com/Hichiro6/watermark
+Issues and PRs on GitHub: https://github.com/Hichiro6/watermark
 
 ---
 
 <div align="center">
 
-**Sécurisez vos documents — simplement, localement, efficacement.**
+**Secure your documents — simply, locally, efficiently.**
 
 Made with ❤️ in Belgium
 
