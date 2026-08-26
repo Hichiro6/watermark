@@ -1,18 +1,31 @@
 {
-  "name": "WaterMark — Sécurisez vos documents",
+  "name": "WaterMark — Secure Documents",
   "short_name": "WaterMark",
-  "description": "Filigrane de sécurité pour documents administratifs. 100% local, vos documents ne quittent jamais votre navigateur.",
+  "description": "Add security watermarks to administrative documents — 100% local",
   "start_url": "/",
   "display": "standalone",
+  "background_color": "#08090a",
+  "theme_color": "#08090a",
   "orientation": "any",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
   "icons": [
     {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
-  ]
+  ],
+  "categories": ["productivity", "utilities"]
 }

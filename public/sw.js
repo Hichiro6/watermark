@@ -1,16 +1,14 @@
-// Service Worker — Cache pour fonctionnement hors-ligne
-const CACHE_NAME = 'watermark-v2';
+// WaterMark Service Worker — offline-first cache
+const CACHE_NAME = 'watermark-v1';
 const ASSETS = [
   '/',
   '/index.html',
-  '/styles/main.css',
-  '/src/main.js',
-  '/src/presets.js',
-  '/src/image-handler.js',
   '/manifest.json',
   '/favicon.svg',
+  '/styles/main.css',
 ];
 
+// Install: pré-cache les assets critiques
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
@@ -18,32 +16,43 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
+// Activate: nettoie les anciens caches
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
-      Promise.all(keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k)))
+      Promise.all(
+        keys.filter((k) => k !== CACHE_NAME).map((k) => caches.delete(k))
+      )
     )
   );
   self.clients.claim();
 });
 
+// Fetch: cache-first pour les assets, network-first pour le reste
 self.addEventListener('fetch', (event) => {
-  // Stratégie : cache-first, fallback réseau
+  const { request } = event;
+
+  // Ignore non-GET et requêtes d'extension
+  if (request.method !== 'GET' || !request.url.startsWith(self.location.origin)) {
+    return;
+  }
+
+  // Assets statiques: cache-first
+  if (request.url.match(/\.(css|js|svg|png|woff2?|ico)$/)) {
+    event.respondWith(
+      caches.match(request).then((cached) => cached || fetch(request))
+    );
+    return;
+  }
+
+  // Pages: network-first avec fallback cache
   event.respondWith(
-    caches.match(event.request).then((cached) => {
-      return cached || fetch(event.request).then((response) => {
-        // Mettre en cache les nouvelles ressources
-        if (response.status === 200 && event.request.method === 'GET') {
-          const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-        }
+    fetch(request)
+      .then((response) => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => cache.put(request, clone));
         return response;
-      }).catch(() => {
-        // Fallback offline — retourner la page principale
-        if (event.request.mode === 'navigate') {
-          return caches.match('/index.html');
-        }
-      });
-    })
+      })
+      .catch(() => caches.match(request))
   );
 });
