@@ -1,8 +1,8 @@
-# Audit Tests & Qualité — Projet Watermark
+# Audit Tests & Qualité — Projet WaterMark
 
 **Date**: 26 août 2026  
 **Projet**: `./` (WaterMark PWA)  
-**Stack**: Vite + Vanilla JS (PDF.js, pdf-lib) + Playwright E2E
+**Stack**: Vite + Vanilla JS (PDF.js, pdf-lib) + Playwright E2E + Vitest + Biome  
 
 ---
 
@@ -18,37 +18,53 @@
 | E2E | `04-positions-reset.spec.js` | 7 | Positions (diagonal, center, bottom, tile), reset, re-upload |
 | E2E | `05-non-regression.spec.js` | 10 | Rotation (+/-), guard handleDownload, canvasesToPdf, erreurs console |
 | E2E | `06-edge-cases.spec.js` | 14 | Images grandes, texte long, valeurs extrêmes, PDF 10 pages, combinaisons |
+| E2E | `a11y.spec.js` | 1 | Accessibilité axe-core (WCAG 2.0 A/AA) |
+| Unit | `i18n.test.js` | 12 | `t()`, `setLanguage()`, `getPresetText()`, traductions |
+| Unit | `presets.test.js` | 5 | Validation des données, unicité des IDs |
 
-**Total: 50 tests E2E** — tous PASSANTS ✅
+**Total: 68 tests** (50 E2E + 1 a11y + 17 unitaires) — tous PASSANTS ✅
 
 ### Infrastructure de test
 
 ```
-tests/e2e/
-├── 01-upload-preview.spec.js
-├── 02-ui-controls.spec.js
-├── 03-download.spec.js
-├── 04-positions-reset.spec.js
-├── 05-non-regression.spec.js
-├── 06-edge-cases.spec.js
-├── globalSetup.js
-├── setup/
-│   ├── locale-setup.js     # Fixture personnalisée pour French locale
-│   └── inject-locale.js    # Script généré par globalSetup
-├── helpers/
-│   ├── test-utils.js          # uploadTestFile(), waitForCanvasRender()
-│   └── test-fixtures-gen.js   # createTestPdf(), createTestImage()
-├── fixtures/                  # Fichiers de test générés (gitignored)
-└── results/                   # Rapports HTML, vidéos, screenshots (gitignored)
+tests/
+├── unit/
+│   ├── i18n.test.js            # Tests unitaires i18n (12 tests)
+│   ├── presets.test.js         # Tests unitaires presets (5 tests)
+│   └── setup.js                # Polyfill localStorage pour jsdom
+├── e2e/
+│   ├── 01-upload-preview.spec.js
+│   ├── 02-ui-controls.spec.js
+│   ├── 03-download.spec.js
+│   ├── 04-positions-reset.spec.js
+│   ├── 05-non-regression.spec.js
+│   ├── 06-edge-cases.spec.js
+│   ├── a11y.spec.js            # Test accessibilité axe-core
+│   ├── globalSetup.js
+│   ├── setup/
+│   │   ├── locale-setup.js     # Fixture personnalisée pour French locale
+│   │   └── inject-locale.js    # Script généré par globalSetup
+│   ├── helpers/
+│   │   ├── test-utils.js       # uploadTestFile(), waitForCanvasRender()
+│   │   └── test-fixtures-gen.js # createTestPdf(), createTestImage()
+│   ├── fixtures/               # Fichiers de test générés (gitignored)
+│   └── results/                # Rapports HTML, vidéos, screenshots (gitignored)
+└── vitest.config.js            # Config Vitest (jsdom, coverage V8)
 ```
 
 ### Commandes disponibles
 
 ```bash
-npm test              # Tous les tests (headless)
-npm run test:ui       # Mode UI Playwright
-npm run test:headed   # Mode visible
-npm run test:report   # Ouvrir le rapport HTML
+npm run test           # Vitest en watch mode
+npm run test:run       # Vitest run (once)
+npm run test:coverage  # Vitest + rapport coverage
+npm run test:unit      # Vitest run (alias)
+npm run test:e2e       # Playwright (tous les tests E2E)
+npm run test:ui        # Mode UI Playwright
+npm run test:headed    # Mode visible Playwright
+npm run test:report    # Ouvrir le rapport HTML Playwright
+npm run lint           # Biome check
+npm run format         # Biome format --write
 ```
 
 ---
@@ -57,60 +73,51 @@ npm run test:report   # Ouvrir le rapport HTML
 
 ### Analyse statique des fonctions source
 
-| Fichier | Lignes | Fonctions | Testé via E2E? |
-|---------|--------|-----------|----------------|
-| `src/main.js` | 535 | ~12 | ✅ Majoritairement |
-| `src/pdf-handler.js` | 116 | 1 (export) | ✅ Via download PDF |
-| `src/image-handler.js` | 116 | 1 (export) | ✅ Via download image |
-| `src/i18n.js` | 424 | ~10 | ⚠️ Partiellement (pas de test unitaire) |
-| `src/presets.js` | 46 | 0 (données) | ✅ Via UI tests |
-| `public/sw.js` | 50 | ~3 | ❌ Pas testé |
+| Fichier | Lignes | Fonctions | Testé ? | Coverage |
+|---------|--------|-----------|---------|----------|
+| `src/main.js` | 559 | ~12 | ✅ E2E | Partiel |
+| `src/image-handler.js` | 114 | 1 (export) | ✅ E2E | 0% |
+| `src/i18n.js` | 424 | ~10 | ✅ Unit + E2E | 39% |
+| `src/presets.js` | 46 | 0 (données) | ✅ Unit + E2E | 0% |
+| `public/sw.js` | 50 | ~3 | ❌ Non testé | N/A |
 
-**Couverture estimée**: ~75-85% des fonctions principales via E2E
+**Coverage globale (V8)**: 22% stmts / 15% branches / 23% funcs / 23% lines
 
 ### Ce qui n'est PAS couvert
 
 1. **Service Worker** (`public/sw.js`) — aucun test PWA/offline
-2. **Logique i18n** — pas de tests unitaires pour `setLanguage()`, `getPresetText()`
-3. **Gestion d'erreurs PDF.js** — erreurs réseau/corruption non simulées
-4. **Edge cases mémoire** — gros fichiers PDF (>50 pages)
+2. **`image-handler.js`** — pas de tests unitaires (couvert via E2E uniquement)
+3. **`main.js`** — logique UI couverte via E2E mais pas de tests unitaires isolés
+4. **Gestion d'erreurs PDF.js** — erreurs réseau/corruption non simulées
 5. **Compatibilité navigateurs** — seul Chromium testé (pas Firefox/Safari)
-6. **Variables d'environnement** — pas de config différente pour dev/prod
 
 ---
 
 ## 3. Linting & Formatting
 
-### État actuel: **AUCUNE CONFIG** ❌
+### État actuel: **CONFIGURÉ** ✅
 
-- ❌ Pas de ESLint/ESLint config
-- ❌ Pas de Prettier/prettierrc
-- ❌ Pas de Biome
+- ✅ **Biome** v2.5.10 (`biome.json`) — lint + format combiné, remplace ESLint + Prettier
+- ✅ Aucun diagnostic résiduel sur `src/` et `tests/unit/`
+- ✅ Scripts npm: `lint`, `format`
 - ❌ Pas de EditorConfig
 - ❌ Pas de husky/pre-commit hooks
 
-**Conséquence**: Style de code non uniforme, risque de régressions syntaxiques.
+### Corrections appliquées par Biome
 
-### Recommandations
+- `useTemplate` → template literals au lieu de concaténation string
+- `parseInt` → radix 10 explicite
+- `useIterableCallbackReturn` → callbacks `forEach` corrigés (pas de return implicite)
+- Imports/variables inutilisés supprimés
+- Formatting automatique (2 espaces, sans parenthèses superflues)
 
-1. **Biome** (recommandé) — Fast, Rust-based, remplace ESLint+Prettier:
-   ```bash
-   npm install -D @biomejs/biome
-   npx biome init
-   ```
+### Pourquoi Biome et pas ESLint ?
 
-2. **ESLint + Prettier** (classique):
-   ```bash
-   npm install -D eslint prettier eslint-config-prettier
-   npx eslint --init
-   ```
-
-3. **Pre-commit hook** (Husky):
-   ```bash
-   npm install -D husky lint-staged
-   npx husky install
-   npx husky add .husky/pre-commit "npx lint-staged"
-   ```
+Biome est un outil moderne (Rust-based) qui combine **linting + formatting** en un seul outil :
+- **10x plus rapide** qu'ESLint + Prettier
+- **Zéro config** par défaut (convention raisonnable)
+- **Tout-en-un** — pas besoin de gérer ESLint + Prettier + eslint-config-prettier
+- Diagnostic clairs et auto-fix puissant
 
 ---
 
@@ -126,99 +133,62 @@ npm run test:report   # Ouvrir le rapport HTML
 - ✅ Trace sur premier retry
 - ✅ French locale forcée via `page.addInitScript()`
 - ✅ WebServer auto (Vite dev server)
-- ⚠️ **Aucune configuration de couverture**
+
+### Vitest (`vitest.config.js`)
+
+- ✅ Environment `jsdom`
+- ✅ Setup file (`tests/unit/setup.js`) — polyfill `localStorage`
+- ✅ Coverage V8 (`@vitest/coverage-v8`)
+- ✅ Thresholds: 20% stmts / 10% branches / 20% funcs / 20% lines
+- ✅ Include: `tests/unit/**/*.test.js`
 
 ### Vite (`vite.config.js`)
 
 - Minimal, correct pour une PWA Vanilla
-- ❌ Pas de config de test unitaire (Vitest)
+- ✅ Config de test unitaire intégrée via Vitest
 
 ---
 
-## 5. Stratégie de Test Proposée
+## 5. Améliorations Restantes
 
-### Niveau 1: Tests Unitaires (Vitest)
+### Accessibilité
+- ✅ **axe-core** — test E2E créé (`a11y.spec.js`, WCAG 2.0 A/AA)
 
-Ajouter **Vitest** pour les fonctions pures:
+### Couverture
+- [ ] Augmenter coverage `image-handler.js` (tests unitaires)
+- [ ] Ajouter tests unitaires pour `main.js` (fonctions pures)
+- [ ] Playwright code coverage (V8 native)
 
-```javascript
-// vitest.config.js
-import { defineConfig } from 'vitest/config';
-
-export default defineConfig({
-  test: {
-    globals: true,
-    environment: 'happy-dom', // ou 'jsdom'
-    include: ['src/**/*.test.js'],
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'json', 'html'],
-    },
-  },
-});
-```
-
-**Tests à ajouter:**
-- `src/i18n.test.js` — `t()`, `setLanguage()`, `getPresetText()`
-- `src/presets.test.js` — validation des données
-- `src/image-handler.test.js` — unit tests (avec jsdom)
-- `src/pdf-handler.test.js` — mock pdf-lib
-
-### Niveau 2: Couverture E2E améliorée
-
-- [ ] Ajouter **Playwright code coverage** (V8 native)
-- [ ] Configurer `coverageConfig` dans `playwright.config.js`
-
-```javascript
-use: {
-  coverage: true,
-  coverageReporters: ['html', 'text'],
-},
-```
-
-### Niveau 3: Accessibilité & Performance
-
-- [ ] **Lighthouse CI** — audits PWA, perf, a11y
-- [ ] **axe-core** — tests d'accessibilité via Playwright
-
-```javascript
-import AxeBuilder from '@axe-core/playwright';
-
-test('accessibility', async ({ page }) => {
-  const accessibilityScanResults = await new AxeBuilder({ page }).analyze();
-  expect(accessibilityScanResults.violations).toEqual([]);
-});
-```
-
-### Niveau 4: Multi-browser
-
+### Multi-browser
 - [ ] Ajouter Firefox à la matrice de test Playwright
 - [ ] Tester Safari (via BrowserStack ou local)
 
-### Niveau 5: PWA Offline Testing
-
+### PWA & Offline
 - [ ] Tests Service Worker (Workbox ou Playwright interception)
 - [ ] Tests mode hors-ligne
 
-### Niveau 6: CI/CD Integration
-
-- [ ] GitHub Actions / GitLab CI
-- [ ] Coverage badge (Coveralls/Codecov)
-- [ ] PR checks automatiques
+### Qualité
+- [ ] EditorConfig
+- [ ] Pre-commit hooks (Husky + lint-staged)
+- [ ] Lighthouse CI — audits PWA, perf, a11y
 
 ---
 
 ## 6. Roadmap Priorisée
 
-| Priority | Action | Effort | Impact |
+| Priority | Action | Statut | Effort |
 |----------|--------|--------|--------|
-| HIGH | Ajouter Biome | 1h | Haut |
-| HIGH | Ajouter Vitest pour i18n | 4h | Moyen |
-| MED | Configurer Playwright coverage | 2h | Moyen |
-| MED | Ajouter axe-core a11y tests | 3h | Moyen |
-| LOW | Tests Service Worker | 6h | Faible |
-| LOW | Multi-browser (Firefox) | 2h | Faible |
-| LOW | Lighthouse CI | 4h | Faible |
+| HIGH | Biome (lint + format) | ✅ Done | 1h |
+| HIGH | Vitest + tests unitaires i18n | ✅ Done | 4h |
+| HIGH | Coverage V8 | ✅ Done | 1h |
+| MED | axe-core a11y tests | ✅ Done | 3h |
+| MED | Tests unitaires image-handler | ⬜ À faire | 2h |
+| MED | Tests unitaires main.js | ⬜ À faire | 4h |
+| LOW | Playwright coverage | ⬜ À faire | 2h |
+| LOW | Tests Service Worker | ⬜ À faire | 6h |
+| LOW | Multi-browser (Firefox) | ⬜ À faire | 2h |
+| LOW | Lighthouse CI | ⬜ À faire | 4h |
+| LOW | Pre-commit hooks | ⬜ À faire | 1h |
 
 ---
 
@@ -227,19 +197,20 @@ test('accessibility', async ({ page }) => {
 ### Points forts
 
 - Suite E2E complète (50 tests) — tous passants
-- Bonne couverture fonctionnelle via Playwright
+- Tests unitaires Vitest (17 tests) — tous passants
+- Test d'accessibilité axe-core configuré
+- Linting Biome propre (0 erreur)
+- Coverage V8 activée et mesurée
 - Helpers bien organisés (fixtures, utils)
-- Rapport HTML avec traces/screenshots
 - Configuration Playwright robuste (retry, timeout, locale)
 
 ### Points d'amélioration
 
-- Aucune config linting/formatting
-- Pas de tests unitaires
-- Pas de couverture de code mesurée
+- Coverage encore faible sur `image-handler.js` et `main.js`
 - Service Worker non testé
 - Uniquement Chromium testé
+- Pas de pre-commit hooks
 
-**Score qualité estimé**: 6/10
+**Score qualité estimé**: 8/10
 
-La base E2E est solide. L'ajout de tests unitaires et de linting ferait passer ce projet à 8-9/10.
+La base de test est solide (E2E + unitaires + a11y + linting). L'ajout de tests unitaires sur les modules non couverts et le multi-browser feraient passer ce projet à 9-10/10.
