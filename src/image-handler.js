@@ -4,7 +4,7 @@
  * @param {Object} options - Options du filigrane
  * @returns {Promise<Blob>} - L'image modifiée en tant que Blob
  */
-export async function watermakImage(file, options) {
+export async function watermarkImage(file, options) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     const reader = new FileReader();

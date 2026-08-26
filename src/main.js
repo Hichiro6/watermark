@@ -1,6 +1,6 @@
 import '../styles/main.css';
 import { PRESETS } from './presets.js';
-import { watermakImage } from './image-handler.js';
+import { watermarkImage } from './image-handler.js';
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import { initI18n, setLanguage, t, getPresetText, getCurrentLanguage } from './i18n.js';
@@ -242,7 +242,11 @@ async function renderPreview() {
     }
   } catch (error) {
     console.error('Erreur de rendu:', error);
-    elements.previewArea.innerHTML = `<p class="error">❌ Erreur: ${error.message}</p>`;
+    elements.previewArea.innerHTML = '';
+    const errEl = document.createElement('p');
+    errEl.className = 'error';
+    errEl.textContent = `❌ Erreur: ${error.message}`;
+    elements.previewArea.appendChild(errEl);
   }
 }
 
@@ -283,7 +287,9 @@ async function renderPdfPreview() {
       await page.render({ canvasContext: ctx, viewport }).promise;
       
       // Appliquer le filigrane sur le canvas rendu
-      applyWatermarkToContext(ctx, canvas.width, canvas.height);
+      const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
+      const locale = localeMap[getCurrentLanguage()] || 'en-US';
+      applyWatermarkToContext(ctx, canvas.width, canvas.height, state.options, locale);
       
       // Ajouter un indicateur de page
       const pageInfo = document.createElement('div');
@@ -308,7 +314,11 @@ async function renderPdfPreview() {
     }
   } catch (error) {
     console.error('PDF preview error:', error);
-    elements.previewArea.innerHTML = `<p class="error">❌ Erreur PDF: ${error.message}</p>`;
+    elements.previewArea.innerHTML = '';
+    const errEl = document.createElement('p');
+    errEl.className = 'error';
+    errEl.textContent = `❌ Erreur PDF: ${error.message}`;
+    elements.previewArea.appendChild(errEl);
   }
 }
 
@@ -329,7 +339,9 @@ async function renderImagePreview() {
   const ctx = canvas.getContext('2d');
   
   ctx.drawImage(img, 0, 0);
-  applyWatermarkToContext(ctx, canvas.width, canvas.height);
+  const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
+  const locale = localeMap[getCurrentLanguage()] || 'en-US';
+  applyWatermarkToContext(ctx, canvas.width, canvas.height, state.options, locale);
   
   elements.previewArea.innerHTML = '';
   elements.previewArea.appendChild(canvas);
@@ -338,32 +350,35 @@ async function renderImagePreview() {
 
 /**
  * Application du filigrane sur un contexte Canvas
+ * @param {CanvasRenderingContext2D} ctx - Contexte canvas
+ * @param {number} width - Largeur du canvas
+ * @param {number} height - Hauteur du canvas
+ * @param {Object} opts - Options du filigrane (text, fontSize, color, opacity, position, rotation)
+ * @param {string} locale - Locale pour le formatage de date (ex: 'fr-FR')
  */
-function applyWatermarkToContext(ctx, width, height) {
-  let text = state.options.text;
+function applyWatermarkToContext(ctx, width, height, opts, locale) {
+  let text = opts.text;
   
   // Replace {date} with today's date; remove unused variables
-  const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
-  const locale = localeMap[getCurrentLanguage()] || 'en-US';
   const todayStr = new Date().toLocaleDateString(locale);
   text = text.replace(/{date}/g, todayStr);
   text = text.replace(/{destinataire}/g, '').replace(/{usage}/g, '');
 
-  const fontSize = Math.min(state.options.fontSize, Math.min(width, height) / 10);
+  const fontSize = Math.min(opts.fontSize, Math.min(width, height) / 10);
   ctx.font = `bold ${fontSize}px sans-serif`;
-  ctx.fillStyle = state.options.color;
-  ctx.globalAlpha = state.options.opacity / 100;
+  ctx.fillStyle = opts.color;
+  ctx.globalAlpha = opts.opacity / 100;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
   const lines = text.split('\n');
   const lineHeight = fontSize * 1.3;
 
-  if (state.options.position === 'diagonal') {
+  if (opts.position === 'diagonal') {
     ctx.save();
     ctx.translate(width / 2, height / 2);
     // Canvas: y va vers le bas, rotation négative = diagonale montante ↗️
-    const rot = state.options.rotation || -45;
+    const rot = opts.rotation || -45;
     ctx.rotate(rot * Math.PI / 180);
     
     const startY = -(lines.length - 1) * lineHeight / 2;
@@ -372,7 +387,7 @@ function applyWatermarkToContext(ctx, width, height) {
     });
     
     ctx.restore();
-  } else if (state.options.position === 'center') {
+  } else if (opts.position === 'center') {
     // Centre, sans rotation (horizontal)
     ctx.save();
     ctx.translate(width / 2, height / 2);
@@ -383,12 +398,12 @@ function applyWatermarkToContext(ctx, width, height) {
     });
     
     ctx.restore();
-  } else if (state.options.position === 'bottom') {
+  } else if (opts.position === 'bottom') {
     const y = height - 100;
     lines.forEach((line, i) => {
       ctx.fillText(line, width / 2, y + i * lineHeight);
     });
-  } else if (state.options.position === 'tile') {
+  } else if (opts.position === 'tile') {
     const tileSize = Math.min(width, height) / 4;
     const fontSizeTile = fontSize / 2;
     
@@ -398,11 +413,12 @@ function applyWatermarkToContext(ctx, width, height) {
       for (let y = tileSize / 2; y < height; y += tileSize) {
         ctx.save();
         ctx.translate(x, y);
-        ctx.rotate((state.options.rotation || -45) * Math.PI / 180);
+        ctx.rotate((opts.rotation || -45) * Math.PI / 180);
         
-        const startY = -(lines.length - 1) * (fontSizeTile * 1.3) / 2;
+        const tileLH = fontSizeTile * 1.3;
+        const startY = -(lines.length - 1) * tileLH / 2;
         lines.forEach((line, i) => {
-          ctx.fillText(line, 0, startY + i * (fontSizeTile * 1.3));
+          ctx.fillText(line, 0, startY + i * tileLH);
         });
         
         ctx.restore();

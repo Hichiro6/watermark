@@ -1,5 +1,5 @@
 // Service Worker — Cache pour fonctionnement hors-ligne
-const CACHE_NAME = 'watermark-v1';
+const CACHE_NAME = 'watermark-v2';
 const ASSETS = [
   '/',
   '/index.html',
@@ -7,7 +7,6 @@ const ASSETS = [
   '/src/main.js',
   '/src/presets.js',
   '/src/image-handler.js',
-  '/src/pdf-handler.js',
   '/manifest.json',
   '/favicon.svg',
 ];
