@@ -473,7 +473,8 @@ function applyTranslations() {
     ['.footer__links a[data-i18n="privacy.link"]', 'textContent', 'privacy.link'],
     ['#dropzone h2', 'textContent', 'dropzone.title'],
     ['#dropzone p', 'textContent', 'dropzone.subtitle'],
-    ['#controls-presets', 'textContent', 'controls.presets'],
+    ['#controls-presets span', 'textContent', 'controls.presets'],
+    ['#controls.text span', 'textContent', 'controls.text'],
     ['label[for="watermark-text"]', 'textContent', 'controls.text'],
     ['#watermark-text', 'placeholder', 'controls.text'],
     ['label[for="destinataire"]', 'textContent', 'controls.recipient'],
@@ -483,7 +484,7 @@ function applyTranslations() {
     ['label[for="date-picker"]', 'textContent', 'controls.date.label'],
     ['#date-mode option[value="today"]', 'textContent', 'controls.date.today'],
     ['#date-mode option[value="custom"]', 'textContent', 'controls.date.custom'],
-    ['.control-group:nth-child(3) h3', 'textContent', 'controls.appearance'],
+    ['#controls.appearance span', 'textContent', 'controls.appearance'],
     ['#btn-download', 'textContent', 'btn.download'],
     ['#btn-reset', 'textContent', 'btn.reset'],
   ];

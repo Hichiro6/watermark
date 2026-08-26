@@ -167,6 +167,24 @@ function bindEvents() {
   // Presets
   bindPresetButtons();
 
+  // Toggle collapsible sections
+  document.querySelectorAll('.control-group__title').forEach((title) => {
+    const toggleSection = () => {
+      const body = title.parentElement.querySelector('.control-group__body');
+      if (!body) return;
+      const expanded = title.getAttribute('aria-expanded') === 'true';
+      title.setAttribute('aria-expanded', String(!expanded));
+      body.classList.toggle('collapsed');
+    };
+    title.addEventListener('click', toggleSection);
+    title.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        toggleSection();
+      }
+    });
+  });
+
   // Language change: re-render presets + watermark text
   document.addEventListener('languagechange', () => {
     renderPresets();

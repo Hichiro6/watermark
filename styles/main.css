@@ -310,6 +310,40 @@ body {
   letter-spacing: 0.05em;
   color: var(--text-tertiary);
   margin-bottom: 0.25rem;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  transition: transform 0.15s ease, color 0.15s ease;
+}
+
+.control-group__title:hover {
+  color: var(--text-secondary);
+}
+
+.control-group__title .chevron {
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.control-group__title[aria-expanded="false"] .chevron {
+  transform: rotate(180deg);
+}
+
+.control-group__body {
+  transition: max-height 0.25s ease, opacity 0.25s ease, padding 0.25s ease;
+  max-height: 2000px;
+  opacity: 1;
+}
+
+.control-group__body.collapsed {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .control-row {
@@ -762,6 +796,7 @@ input[type="range"]::-moz-range-thumb {
   gap: 0.25rem;
   align-items: center;
   padding: 0.25rem 0.5rem;
+  margin-top: 0.75rem;
   background: var(--surface-elevated);
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
