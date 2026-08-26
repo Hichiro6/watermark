@@ -791,18 +791,31 @@ input[type="range"]::-moz-range-thumb {
   margin-top: auto;
 }
 
-.footer__privacy {
-  margin: 0;
+.footer__links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
-.footer__privacy a {
+.footer__links a {
   color: var(--text-secondary);
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s ease;
 }
 
-.footer__privacy a:hover {
+.footer__links a:hover {
   color: var(--brand-accent);
   text-decoration: underline;
+}
+
+.footer__separator {
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+}
+
+.footer__bmc:hover {
+  color: #ff813f !important;
 }
