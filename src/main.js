@@ -15,7 +15,7 @@ const state = {
     text: 'Copy for identity verification only\n{date}',
     position: 'diagonal',
     opacity: 30,
-    fontSize: 48,
+    fontSize: 5,
     color: '#dc2626',
     rotation: -45,
   },
@@ -42,7 +42,7 @@ async function init() {
     const localizedText = getPresetText(defaultPreset.id);
     if (localizedText) {
       // Substitute {date} with today's date automatically
-      const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
+      const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT', nl: 'nl-NL', it: 'it-IT' };
       const todayStr = new Date().toLocaleDateString(localeMap[getCurrentLanguage()] || 'en-US');
       const textWithDate = localizedText.replace(/{date}/g, todayStr);
       elements.watermarkText.value = textWithDate;
@@ -131,7 +131,7 @@ function bindEvents() {
   });
   elements.fontSizeSlider.addEventListener('input', (e) => {
     state.options.fontSize = parseInt(e.target.value, 10);
-    elements.fontSizeValue.textContent = `${e.target.value}px`;
+    elements.fontSizeValue.textContent = `${e.target.value}%`;
     debouncedPreview();
   });
   elements.rotationSlider.addEventListener('input', (e) => {
@@ -177,7 +177,7 @@ function bindEvents() {
       const preset = PRESETS.find((p) => p.id === activePreset.dataset.preset);
       if (preset) {
         const localizedText = getPresetText(preset.id);
-        const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
+        const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT', nl: 'nl-NL', it: 'it-IT' };
         const todayStr = new Date().toLocaleDateString(localeMap[getCurrentLanguage()] || 'en-US');
         const textWithDate = localizedText.replace(/{date}/g, todayStr);
         elements.watermarkText.value = textWithDate;
@@ -202,7 +202,7 @@ function bindPresetButtons() {
       const preset = PRESETS.find((p) => p.id === btn.dataset.preset);
       if (preset) {
         const localizedText = getPresetText(preset.id);
-        const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
+        const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT', nl: 'nl-NL', it: 'it-IT' };
         const todayStr = new Date().toLocaleDateString(localeMap[getCurrentLanguage()] || 'en-US');
         const textWithDate = localizedText.replace(/{date}/g, todayStr);
         elements.watermarkText.value = textWithDate;
@@ -329,7 +329,7 @@ async function renderPdfPreview() {
       await page.render({ canvasContext: ctx, viewport }).promise;
 
       // Appliquer le filigrane sur le canvas rendu
-      const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
+      const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT', nl: 'nl-NL', it: 'it-IT' };
       const locale = localeMap[getCurrentLanguage()] || 'en-US';
       applyWatermarkToContext(ctx, canvas.width, canvas.height, state.options, locale);
 
@@ -381,7 +381,7 @@ async function renderImagePreview() {
   const ctx = canvas.getContext('2d');
 
   ctx.drawImage(img, 0, 0);
-  const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT' };
+  const localeMap = { en: 'en-US', fr: 'fr-FR', de: 'de-DE', es: 'es-ES', pt: 'pt-PT', nl: 'nl-NL', it: 'it-IT' };
   const locale = localeMap[getCurrentLanguage()] || 'en-US';
   applyWatermarkToContext(ctx, canvas.width, canvas.height, state.options, locale);
 
@@ -406,15 +406,26 @@ function applyWatermarkToContext(ctx, width, height, opts, locale) {
   text = text.replace(/{date}/g, todayStr);
   text = text.replace(/{destinataire}/g, '').replace(/{usage}/g, '');
 
-  const fontSize = Math.min(opts.fontSize, Math.min(width, height) / 10);
-  ctx.font = `bold ${fontSize}px sans-serif`;
+  // Calcul proportionnel: la taille dépend de la dimension de l'image
+  // opts.fontSize (16-120) représente un pourcentage de la plus petite dimension
+  const baseDim = Math.min(width, height);
+  const scaleFactor = opts.fontSize / 100; // 48 = 48%, 100 = 100% de baseDim
+  const fontSize = baseDim * scaleFactor;
+
+  // Bornes de sécurité pour éviter des tailles extrêmes
+  const minFontSize = Math.max(24, baseDim * 0.02); // minimum 24px ou 2% de la dimension
+  const maxFontSize = Math.min(baseDim * 0.15, 600); // maximum 15% de la dimension ou 600px
+
+  const finalFontSize = Math.max(minFontSize, Math.min(fontSize, maxFontSize));
+
+  ctx.font = `bold ${finalFontSize}px sans-serif`;
   ctx.fillStyle = opts.color;
   ctx.globalAlpha = opts.opacity / 100;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
   const lines = text.split('\n');
-  const lineHeight = fontSize * 1.3;
+  const lineHeight = finalFontSize * 1.3;
 
   if (opts.position === 'diagonal') {
     ctx.save();
@@ -441,13 +452,13 @@ function applyWatermarkToContext(ctx, width, height, opts, locale) {
 
     ctx.restore();
   } else if (opts.position === 'bottom') {
-    const y = height - 100;
+    const y = height - Math.max(100, baseDim * 0.05);
     lines.forEach((line, i) => {
       ctx.fillText(line, width / 2, y + i * lineHeight);
     });
   } else if (opts.position === 'tile') {
     const tileSize = Math.min(width, height) / 4;
-    const fontSizeTile = fontSize / 2;
+    const fontSizeTile = finalFontSize / 2;
 
     ctx.font = `bold ${fontSizeTile}px sans-serif`;
 
