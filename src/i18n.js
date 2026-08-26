@@ -451,12 +451,8 @@ function createLanguageSelector() {
     wrapper.appendChild(btn);
   }
 
-  const privacy = header.querySelector('.header__privacy');
-  if (privacy) {
-    privacy.insertAdjacentElement('afterend', wrapper);
-  } else {
-    header.appendChild(wrapper);
-  }
+  // Language selector: append after tagline, centered by CSS
+  header.appendChild(wrapper);
 }
 
 function applyTranslations() {
@@ -469,7 +465,6 @@ function applyTranslations() {
   // Mapping simple : [sélecteur, property, key]
   const map = [
     ['.header__tagline', 'textContent', 'header.tagline'],
-    ['.badge--privacy', 'textContent', 'privacy.badge'],
     ['.footer__links a[data-i18n="privacy.link"]', 'textContent', 'privacy.link'],
     ['.footer__bmc span[data-i18n="footer.bmc"]', 'textContent', 'footer.bmc'],
     ['#dropzone h2', 'textContent', 'dropzone.title'],
@@ -477,10 +472,6 @@ function applyTranslations() {
     ['#controls-presets > span', 'textContent', 'controls.presets'],
     ['#controls\\.text > span', 'textContent', 'controls.text'],
     ['#watermark-text', 'placeholder', 'controls.text'],
-    ['#destinataire', 'placeholder', 'controls.recipient.ph'],
-    ['#usage', 'placeholder', 'controls.usage.ph'],
-    ['#date-mode option[value="today"]', 'textContent', 'controls.date.today'],
-    ['#date-mode option[value="custom"]', 'textContent', 'controls.date.custom'],
     ['#controls\\.appearance > span', 'textContent', 'controls.appearance'],
   ];
 

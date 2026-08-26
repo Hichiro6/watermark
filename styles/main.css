@@ -121,14 +121,7 @@ body {
   font-size: clamp(1rem, 2vw, 1.125rem);
   color: var(--text-secondary);
   font-weight: 400;
-}
-
-.header__privacy {
-  margin-top: 1.25rem;
-}
-
-.header__tagline + .badge {
-  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 .badge {
@@ -142,12 +135,6 @@ body {
   border: 1px solid var(--brand-indigo);
   background: rgba(94, 106, 210, 0.1);
   color: var(--brand-accent);
-}
-
-.badge--privacy {
-  /* Style spécifique pour le badge de confidentialité */
-  background: rgba(94, 106, 210, 0.12);
-  border-color: var(--brand-indigo);
 }
 
 /* ===== Dropzone ===== */
@@ -792,14 +779,15 @@ input[type="range"]::-moz-range-thumb {
 
 /* ===== Language Selector ===== */
 .lang-selector {
-  display: flex;
+  display: inline-flex;
   gap: 0.25rem;
   align-items: center;
   padding: 0.25rem 0.5rem;
-  margin-top: 0.75rem;
+  margin: 0.75rem auto 0;
   background: var(--surface-elevated);
   border-radius: 8px;
   border: 1px solid var(--border-subtle);
+  width: fit-content;
 }
 
 .lang-btn {
