@@ -259,16 +259,13 @@ const STORAGE_KEY = 'watermark_lang';
 let currentLang = 'en';
 
 /**
- * Initialise l'i18n : langue sauvegardée ou détection auto, création du sélecteur
+ * Initialise l'i18n : anglais par défaut, sauf préférence sauvegardée
  */
 export function initI18n() {
-  // Charger la langue sauvegardée ou détecter celle du navigateur
+  // Utiliser la langue sauvegardée sinon anglais par défaut (pas de détection auto)
   const saved = localStorage.getItem(STORAGE_KEY);
   if (saved && LANGUAGES[saved]) {
     currentLang = saved;
-  } else {
-    const navLang = navigator.language.slice(0, 2);
-    if (LANGUAGES[navLang]) currentLang = navLang;
   }
 
   // Créer le sélecteur de langue dans le header
