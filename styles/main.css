@@ -127,6 +127,10 @@ body {
   margin-top: 1.25rem;
 }
 
+.header__tagline + .badge {
+  margin-top: 1rem;
+}
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -138,6 +142,12 @@ body {
   border: 1px solid var(--brand-indigo);
   background: rgba(94, 106, 210, 0.1);
   color: var(--brand-accent);
+}
+
+.badge--privacy {
+  /* Style spécifique pour le badge de confidentialité */
+  background: rgba(94, 106, 210, 0.12);
+  border-color: var(--brand-indigo);
 }
 
 /* ===== Dropzone ===== */
