@@ -21,7 +21,7 @@ WaterMark est une **PWA (Progressive Web App)** 100% client-side conçue pour aj
 ## 1. Structure du Projet
 
 ```
-/home/hichiro/projects/watermark/
+/
 ├── public/
 │   ├── favicon.svg           # Icône de l'application
 │   ├── manifest.json         # Manifest PWA

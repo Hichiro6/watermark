@@ -1,7 +1,7 @@
 # Audit Tests & Qualité — Projet Watermark
 
 **Date**: 26 août 2026  
-**Projet**: `/home/hichiro/projects/watermark`  
+**Projet**: `./` (WaterMark PWA)  
 **Stack**: Vite + Vanilla JS (PDF.js, pdf-lib) + Playwright E2E
 
 ---
