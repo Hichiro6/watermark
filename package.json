@@ -1,7 +1,7 @@
 {
   "name": "watermark",
   "version": "1.0.0",
-  "description": "Filigrane de sécurité pour documents administratifs — 100% client-side",
+  "description": "Security watermark for administrative documents — 100% client-side",
   "type": "module",
   "license": "CC-BY-NC-ND-4.0",
   "scripts": {
@@ -21,8 +21,7 @@
   },
   "dependencies": {
     "pdf-lib": "1.17.1",
-    "pdfjs-dist": "6.2.108",
-    "playwright": "1.62.1"
+    "pdfjs-dist": "6.2.108"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
@@ -30,6 +29,7 @@
     "@playwright/test": "1.62.1",
     "@vitest/coverage-v8": "^4.1.11",
     "jsdom": "^30.0.1",
+    "playwright": "1.62.1",
     "vite": "5.4.0",
     "vitest": "^4.1.11"
   }
