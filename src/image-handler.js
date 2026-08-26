@@ -28,7 +28,7 @@ export async function watermarkImage(file, options) {
       let text = options.text;
       let dateStr;
       if (options.dateMode === 'custom' && options.customDate) {
-        const d = new Date(options.customDate + 'T00:00:00');
+        const d = new Date(`${options.customDate}T00:00:00`);
         dateStr = d.toLocaleDateString('fr-FR');
       } else {
         dateStr = new Date().toLocaleDateString('fr-FR');
@@ -47,19 +47,19 @@ export async function watermarkImage(file, options) {
 
       // Mesurer le texte pour le centrage
       const metrics = ctx.measureText(text);
-      const textWidth = metrics.width;
-      const textHeight = fontSize;
+      const _textWidth = metrics.width;
+      const _textHeight = fontSize;
 
       if (options.position === 'diagonal' || options.position === 'center') {
         // Filigrane centré avec rotation
         ctx.save();
         ctx.translate(canvas.width / 2, canvas.height / 2);
-        ctx.rotate((options.rotation || -45) * Math.PI / 180);
-        
+        ctx.rotate(((options.rotation || -45) * Math.PI) / 180);
+
         // Si plusieurs lignes
         const lines = text.split('\n');
         const lineHeight = fontSize * 1.3;
-        const startY = -(lines.length - 1) * lineHeight / 2;
+        const startY = (-(lines.length - 1) * lineHeight) / 2;
 
         lines.forEach((line, i) => {
           ctx.fillText(line, 0, startY + i * lineHeight);
@@ -71,7 +71,7 @@ export async function watermarkImage(file, options) {
         const lines = text.split('\n');
         const lineHeight = fontSize * 1.3;
         const y = canvas.height - 100;
-        
+
         lines.forEach((line, i) => {
           ctx.fillText(line, canvas.width / 2, y + i * lineHeight);
         });
@@ -79,23 +79,23 @@ export async function watermarkImage(file, options) {
         // Mosaïque répétée
         const tileSize = Math.min(canvas.width, canvas.height) / 4;
         const fontSizeTile = fontSize / 2;
-        
+
         ctx.font = `bold ${fontSizeTile}px sans-serif`;
-        
+
         for (let x = tileSize / 2; x < canvas.width; x += tileSize) {
           for (let y = tileSize / 2; y < canvas.height; y += tileSize) {
             ctx.save();
             ctx.translate(x, y);
-            ctx.rotate((options.rotation || -45) * Math.PI / 180);
-            
+            ctx.rotate(((options.rotation || -45) * Math.PI) / 180);
+
             const lines = text.split('\n');
             const lineHeight = fontSizeTile * 1.3;
-            const startY = -(lines.length - 1) * lineHeight / 2;
-            
+            const startY = (-(lines.length - 1) * lineHeight) / 2;
+
             lines.forEach((line, i) => {
               ctx.fillText(line, 0, startY + i * lineHeight);
             });
-            
+
             ctx.restore();
           }
         }
@@ -108,7 +108,7 @@ export async function watermarkImage(file, options) {
     };
 
     img.onerror = () => {
-      reject(new Error('Erreur lors du chargement de l\'image'));
+      reject(new Error("Erreur lors du chargement de l'image"));
     };
 
     reader.readAsDataURL(file);

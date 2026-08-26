@@ -1,12 +1,12 @@
 /**
  * WaterMark PWA - Système de traduction multilingue
  * Langues : EN (principal), FR, DE, ES, PT
- * 
+ *
  * Utilisation :
  *   - Éléments avec data-i18n="key" sont traduits automatiquement
  *   - data-i18n-placeholder pour les placeholders d'inputs
  *   - data-i18n-title pour les titres/labels
- * 
+ *
  * API :
  *   initI18n()      - Appelée au démarrage, initialise la langue
  *   setLanguage(lg) - Change la langue (ex: 'fr', 'de')
@@ -98,7 +98,8 @@ export const TRANSLATIONS = {
     'btn.download': 'Download',
     'btn.reset': 'New document',
     'hints.variables': "Variable {date} is replaced with today's date automatically.",
-    'alerts.unsupported': 'Unsupported format. Please choose a PDF or image (JPG, PNG, WEBP, BMP, GIF).',
+    'alerts.unsupported':
+      'Unsupported format. Please choose a PDF or image (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Download error: ',
     'page.indicator': 'Page {num} of {total}',
     'errors.pdf': '❌ PDF error: {msg}',
@@ -134,8 +135,9 @@ export const TRANSLATIONS = {
     'controls.rotation': 'Rotation',
     'btn.download': 'Télécharger',
     'btn.reset': 'Nouveau document',
-    'hints.variables': "La variable {date} est remplacée automatiquement par la date du jour.",
-    'alerts.unsupported': 'Format non pris en charge. Veuillez choisir un PDF ou une image (JPG, PNG, WEBP, BMP, GIF).',
+    'hints.variables': 'La variable {date} est remplacée automatiquement par la date du jour.',
+    'alerts.unsupported':
+      'Format non pris en charge. Veuillez choisir un PDF ou une image (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Erreur de téléchargement : ',
     'page.indicator': 'Page {num} de {total}',
     'errors.pdf': '❌ Erreur PDF : {msg}',
@@ -172,7 +174,8 @@ export const TRANSLATIONS = {
     'btn.download': 'Herunterladen',
     'btn.reset': 'Neues Dokument',
     'hints.variables': 'Die Variable {date} wird automatisch durch das heutige Datum ersetzt.',
-    'alerts.unsupported': 'Nicht unterstütztes Format. Bitte wählen Sie ein PDF oder Bild (JPG, PNG, WEBP, BMP, GIF).',
+    'alerts.unsupported':
+      'Nicht unterstütztes Format. Bitte wählen Sie ein PDF oder Bild (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Download-Fehler: ',
     'page.indicator': 'Seite {num} von {total}',
     'errors.pdf': '❌ PDF-Fehler: {msg}',
@@ -208,8 +211,10 @@ export const TRANSLATIONS = {
     'controls.rotation': 'Rotación',
     'btn.download': 'Descargar',
     'btn.reset': 'Nuevo documento',
-    'hints.variables': 'Las variables {date}, {destinataire} y {usage} se reemplazan automáticamente.',
-    'alerts.unsupported': 'Formato no compatible. Elige un PDF o imagen (JPG, PNG, WEBP, BMP, GIF).',
+    'hints.variables':
+      'Las variables {date}, {destinataire} y {usage} se reemplazan automáticamente.',
+    'alerts.unsupported':
+      'Formato no compatible. Elige un PDF o imagen (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Error de descarga: ',
     'page.indicator': 'Página {num} de {total}',
     'errors.pdf': '❌ Error de PDF: {msg}',
@@ -218,13 +223,13 @@ export const TRANSLATIONS = {
   },
   pt: {
     'app.title': 'WaterMark — Proteja seus documentos',
-    'header.tagline': 'Marca d\'água de segurança para documentos administrativos',
+    'header.tagline': "Marca d'água de segurança para documentos administrativos",
     'privacy.badge': '🔒 100% local — seus documentos nunca saem do navegador',
     'privacy.link': '🔒 100% local — seus documentos nunca saem do navegador',
     'dropzone.title': 'Solte seu documento aqui',
     'dropzone.subtitle': 'ou clique para selecionar um arquivo',
     'controls.presets': 'Modelos rápidos',
-    'controls.text': 'Texto da marca d\'água',
+    'controls.text': "Texto da marca d'água",
     'controls.recipient': 'Destinatário',
     'controls.recipient.ph': 'Ex: Banco Silva',
     'controls.usage': 'Uso',
@@ -245,8 +250,10 @@ export const TRANSLATIONS = {
     'controls.rotation': 'Rotação',
     'btn.download': 'Baixar',
     'btn.reset': 'Novo documento',
-    'hints.variables': 'Variáveis {date}, {destinataire} e {usage} são substituídas automaticamente.',
-    'alerts.unsupported': 'Formato não suportado. Escolha um PDF ou imagem (JPG, PNG, WEBP, BMP, GIF).',
+    'hints.variables':
+      'Variáveis {date}, {destinataire} e {usage} são substituídas automaticamente.',
+    'alerts.unsupported':
+      'Formato não suportado. Escolha um PDF ou imagem (JPG, PNG, WEBP, BMP, GIF).',
     'alerts.download.error': 'Erro de download: ',
     'page.indicator': 'Página {num} de {total}',
     'errors.pdf': '❌ Erro de PDF: {msg}',
@@ -273,7 +280,7 @@ export function initI18n() {
 
   // Créer le sélecteur de langue dans le header
   createLanguageSelector();
-  
+
   // Appliquer toutes les traductions
   applyTranslations();
 }
@@ -283,22 +290,22 @@ export function initI18n() {
  */
 export function setLanguage(lang, onPresetsChanged = null) {
   if (!LANGUAGES[lang]) return;
-  
+
   currentLang = lang;
   localStorage.setItem(STORAGE_KEY, lang);
-  
+
   // Mettre à jour le bouton actif
-  document.querySelectorAll('.lang-btn').forEach(btn => {
+  document.querySelectorAll('.lang-btn').forEach((btn) => {
     btn.classList.toggle('active', btn.dataset.lang === lang);
     btn.setAttribute('aria-pressed', btn.dataset.lang === lang ? 'true' : 'false');
   });
-  
+
   // Appliquer les traductions
   applyTranslations();
-  
+
   // Callback pour re-rendre les presets
   if (onPresetsChanged) onPresetsChanged();
-  
+
   // Déclencher un event input sur le textarea pour refresh
   const wmText = document.getElementById('watermark-text');
   if (wmText) wmText.dispatchEvent(new Event('input'));
@@ -317,7 +324,7 @@ export function getCurrentLanguage() {
 export function t(key, params = {}) {
   const dict = TRANSLATIONS[currentLang] || TRANSLATIONS.en;
   let text = dict[key] ?? TRANSLATIONS.en[key] ?? key;
-  
+
   for (const [k, v] of Object.entries(params)) {
     text = text.replaceAll(`{${k}}`, String(v));
   }
@@ -345,7 +352,7 @@ function createLanguageSelector() {
 
   for (const [code, info] of Object.entries(LANGUAGES)) {
     const btn = document.createElement('button');
-    btn.className = 'lang-btn' + (code === currentLang ? ' active' : '');
+    btn.className = `lang-btn${code === currentLang ? ' active' : ''}`;
     btn.dataset.lang = code;
     btn.type = 'button';
     btn.title = info.name;
@@ -366,11 +373,11 @@ function createLanguageSelector() {
 
 function applyTranslations() {
   const dict = TRANSLATIONS[currentLang];
-  
+
   // Document title
   document.title = dict['app.title'];
   document.documentElement.lang = currentLang;
-  
+
   // Mapping simple : [sélecteur, property, key]
   const map = [
     ['.header__tagline', 'textContent', 'header.tagline'],
@@ -392,43 +399,56 @@ function applyTranslations() {
     ['#btn-download', 'textContent', 'btn.download'],
     ['#btn-reset', 'textContent', 'btn.reset'],
   ];
-  
+
   map.forEach(([sel, prop, key]) => {
     const el = document.querySelector(sel);
     if (el) el[prop] = dict[key];
   });
-  
+
   // Labels avec valeurs dynamiques (% ou px)
-  const labels = document.querySelectorAll('.control-field > label:not(:has(.value-badge):first-child) ~ .value-badge');
-  labels.forEach(badge => {
+  const labels = document.querySelectorAll(
+    '.control-field > label:not(:has(.value-badge):first-child) ~ .value-badge',
+  );
+  labels.forEach((badge) => {
     const prev = badge.previousSibling;
     if (prev && prev.nodeType === Node.TEXT_NODE) {
       const text = prev.textContent.trim();
-      if (text.startsWith('O') || text.startsWith('Op') || text.startsWith('Ope') || text.startsWith('D') || text.startsWith('Deck')) {
-        prev.textContent = dict['controls.opacity'] + ' ';
-      } else if (text.startsWith('T') || text.startsWith('Ta') || text.startsWith('Size') || text.startsWith('Gö')) {
-        prev.textContent = dict['controls.size'] + ' ';
+      if (
+        text.startsWith('O') ||
+        text.startsWith('Op') ||
+        text.startsWith('Ope') ||
+        text.startsWith('D') ||
+        text.startsWith('Deck')
+      ) {
+        prev.textContent = `${dict['controls.opacity']} `;
+      } else if (
+        text.startsWith('T') ||
+        text.startsWith('Ta') ||
+        text.startsWith('Size') ||
+        text.startsWith('Gö')
+      ) {
+        prev.textContent = `${dict['controls.size']} `;
       } else if (text.startsWith('Ro')) {
-        prev.textContent = dict['controls.rotation'] + ' ';
+        prev.textContent = `${dict['controls.rotation']} `;
       }
     }
   });
-  
+
   // Position buttons
-  document.querySelectorAll('[data-position]').forEach(btn => {
+  document.querySelectorAll('[data-position]').forEach((btn) => {
     const pos = btn.dataset.position;
     const key = `controls.pos.${pos}`;
     btn.textContent = dict[key];
   });
-  
+
   // Hints
   const hints = document.querySelectorAll('.control-hint');
-  hints.forEach(hint => {
+  hints.forEach((hint) => {
     if (hint.textContent.includes('{date}')) {
       hint.innerHTML = dict['controls.date.hint'].replace('{date}', '<code>{date}</code>');
     }
   });
-  
+
   const infoP = document.querySelector('.info-box p');
   if (infoP) {
     infoP.innerHTML = dict['hints.variables']

@@ -4,9 +4,9 @@ export const PRESETS = [
   {
     id: 'identite',
     icon: '🪪',
-    label: 'Pièce d\'identité',
+    label: "Pièce d'identité",
     hint: 'Vérification identité',
-    text: 'Copie pour vérification d\'identité uniquement\n{date}',
+    text: "Copie pour vérification d'identité uniquement\n{date}",
   },
   {
     id: 'rib',

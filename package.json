@@ -8,7 +8,13 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "test": "npx playwright test",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:unit": "vitest run",
+    "test:e2e": "npx playwright test",
     "test:ui": "npx playwright test --ui",
     "test:headed": "npx playwright test --headed",
     "test:report": "npx playwright show-report tests/e2e/results/report"
@@ -19,7 +25,12 @@
     "playwright": "1.62.1"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@biomejs/biome": "^2.5.10",
     "@playwright/test": "1.62.1",
-    "vite": "5.4.0"
+    "@vitest/coverage-v8": "^4.1.11",
+    "jsdom": "^30.0.1",
+    "vite": "5.4.0",
+    "vitest": "^4.1.11"
   }
 }
