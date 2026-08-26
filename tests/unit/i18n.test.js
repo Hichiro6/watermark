@@ -50,7 +50,7 @@ describe('i18n - Core functions', () => {
 
 describe('i18n - Languages map', () => {
   it('contient toutes les langues attendues', () => {
-    expect(Object.keys(LANGUAGES)).toEqual(['en', 'fr', 'de', 'es', 'pt']);
+    expect(Object.keys(LANGUAGES)).toEqual(['en', 'fr', 'de', 'es', 'pt', 'nl', 'it']);
   });
 
   it('a des noms et drapeaux pour chaque langue', () => {
