@@ -103,6 +103,12 @@ function renderPresets() {
 function bindEvents() {
   // Dropzone
   elements.dropzone.addEventListener('click', () => elements.fileInput.click());
+  elements.dropzone.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      elements.fileInput.click();
+    }
+  });
   elements.dropzone.addEventListener('dragover', (e) => {
     e.preventDefault();
     elements.dropzone.classList.add('dragover');
@@ -284,6 +290,10 @@ async function loadFile(file) {
   elements.filename.textContent = file.name;
   elements.dropzone.hidden = true;
   elements.workspace.hidden = false;
+
+  // Announce to screen readers
+  const srLive = document.getElementById('sr-live');
+  if (srLive) srLive.textContent = `Document ${file.name} loaded. Workspace is now visible.`;
 
   await renderPreview();
 }
