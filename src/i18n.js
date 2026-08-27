@@ -465,6 +465,7 @@ function applyTranslations() {
   // Mapping simple : [sélecteur, property, key]
   const map = [
     ['.header__tagline', 'textContent', 'header.tagline'],
+    ['.footer__privacy .badge[data-i18n="privacy.badge"]', 'textContent', 'privacy.badge'],
     ['.footer__links a[data-i18n="privacy.link"]', 'textContent', 'privacy.link'],
     ['.footer__bmc span[data-i18n="footer.bmc"]', 'textContent', 'footer.bmc'],
     ['#dropzone h2', 'textContent', 'dropzone.title'],
