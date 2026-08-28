@@ -418,9 +418,10 @@ body {
   display: inline-block;
   float: right;
   font-weight: 590;
-  color: var(--brand-accent);
-  font-size: 0.8rem;
-  padding: 0.1rem 0.4rem;
+  color: #ffffff;
+  font-size: 0.75rem;
+  background: var(--bg-elevated, #28282c);
+  padding: 0.15rem 0.5rem;
   border-radius: 4px;
 }
 
