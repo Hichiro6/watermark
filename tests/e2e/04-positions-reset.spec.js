@@ -125,7 +125,7 @@ test.describe('🔄 Positions et Reset', () => {
 
     // Modify some controls
     await page.fill('#opacity', '80');
-    await page.fill('#fontsize', '100');
+    await page.fill('#fontsize', '10');
     await page.fill('#rotation', '45');
     await page.waitForTimeout(500);
 

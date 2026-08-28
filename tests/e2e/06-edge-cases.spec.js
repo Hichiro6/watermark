@@ -220,7 +220,7 @@ test.describe('⚠️ Edge Cases', () => {
     expect(width, 'Canvas should render at +90° rotation').toBeGreaterThan(0);
   });
 
-  test('FontSize minimale (16px) → rendu sans erreur', async ({ page }) => {
+  test('FontSize minimale (2%) → rendu sans erreur', async ({ page }) => {
     const testPngPath = createTestImage({ filename: 'fontsize-min.png', text: 'FS Min' });
 
     await page.goto('/');
@@ -230,17 +230,17 @@ test.describe('⚠️ Edge Cases', () => {
     await expect(page.locator('#workspace')).toBeVisible({ timeout: 10000 });
     await page.waitForSelector('canvas', { timeout: 10000 });
 
-    await page.fill('#fontsize', '16');
+    await page.fill('#fontsize', '2');
     await page.waitForTimeout(500);
-    expect(await page.locator('#fontsize').inputValue()).toBe('16');
-    await expect(page.locator('#fontsize-value')).toContainText('16px');
+    expect(await page.locator('#fontsize').inputValue()).toBe('2');
+    await expect(page.locator('#fontsize-value')).toContainText('2%');
 
     const canvas = page.locator('canvas').first();
     const width = await canvas.evaluate((el) => el.width);
     expect(width, 'Canvas should render with min font size').toBeGreaterThan(0);
   });
 
-  test('FontSize maximale (120px) → rendu sans erreur', async ({ page }) => {
+  test('FontSize maximale (15%) → rendu sans erreur', async ({ page }) => {
     const testPngPath = createTestImage({ filename: 'fontsize-max.png', text: 'FS Max' });
 
     await page.goto('/');
@@ -250,17 +250,17 @@ test.describe('⚠️ Edge Cases', () => {
     await expect(page.locator('#workspace')).toBeVisible({ timeout: 10000 });
     await page.waitForSelector('canvas', { timeout: 10000 });
 
-    await page.fill('#fontsize', '120');
+    await page.fill('#fontsize', '15');
     await page.waitForTimeout(500);
-    expect(await page.locator('#fontsize').inputValue()).toBe('120');
-    await expect(page.locator('#fontsize-value')).toContainText('120px');
+    expect(await page.locator('#fontsize').inputValue()).toBe('15');
+    await expect(page.locator('#fontsize-value')).toContainText('15%');
 
     const canvas = page.locator('canvas').first();
     const width = await canvas.evaluate((el) => el.width);
     expect(width, 'Canvas should render with max font size').toBeGreaterThan(0);
   });
 
-  test('Combinaison extrême: opacity 5%, rotation -90°, fontsize 120px', async ({ page }) => {
+  test('Combinaison extrême: opacity 5%, rotation -90°, fontsize 15%', async ({ page }) => {
     const testPngPath = createTestImage({ filename: 'extreme-combo.png', text: 'EXTREME' });
 
     await page.goto('/');
@@ -274,7 +274,7 @@ test.describe('⚠️ Edge Cases', () => {
     // Extreme values
     await page.fill('#opacity', '5');
     await page.fill('#rotation', '-90');
-    await page.fill('#fontsize', '120');
+    await page.fill('#fontsize', '15');
     await page.waitForTimeout(500);
 
     const canvas = page.locator('canvas').first();
