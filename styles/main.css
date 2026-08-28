@@ -63,7 +63,7 @@
     --bg-marketing: #f7f8f8;
     --bg-panel: #f3f4f5;
     --bg-surface: #ffffff;
-    --bg-elevated: #ffffff;
+    --bg-elevated: #e5e7eb;
 
     --text-primary: #171717;
     --text-secondary: #444444;
@@ -438,6 +438,12 @@ body {
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
   float: none;
+}
+
+@media (prefers-color-scheme: light) {
+  .value-badge {
+    color: #171717;
+  }
 }
 
 .control-group__controls {
