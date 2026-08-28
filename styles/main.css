@@ -123,6 +123,19 @@ body {
   }
 }
 
+/* ===== App Layout ===== */
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.app > * {
+  width: 100%;
+  max-width: 1280px;
+}
+
 /* ===== Header ===== */
 .header {
   text-align: center;
@@ -415,14 +428,31 @@ body {
 }
 
 .value-badge {
-  display: inline-block;
-  float: right;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   font-weight: 590;
   color: #ffffff;
   font-size: 0.75rem;
   background: var(--bg-elevated, #28282c);
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
+  float: none;
+}
+
+.control-group__controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.control-group__label {
+  flex: 1;
+}
+
+.value-badge {
+  white-space: nowrap;
 }
 
 /* ===== Inputs ===== */
@@ -633,12 +663,18 @@ input[type="range"]::-moz-range-thumb {
 .btn--ghost {
   background: rgba(255, 255, 255, 0.03);
   color: var(--text-secondary);
-  padding: 0.25rem;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  max-width: 40px;
+  min-height: 40px;
+  padding: 0;
   border: none;
   border-radius: var(--radius-sm);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .btn--ghost:hover {
