@@ -50,7 +50,10 @@ export async function renderPreview() {
   const previewArea = document.getElementById('preview-area');
   if (!previewArea) return;
 
-  previewArea.innerHTML = '<div class="spinner"></div>';
+  // Only show spinner on first render (no existing canvas to keep visible)
+  if (!previewArea.querySelector('canvas')) {
+    previewArea.innerHTML = '<div class="spinner"></div>';
+  }
 
   try {
     if (state.file.type === 'application/pdf') {
@@ -92,6 +95,7 @@ async function renderPdfPreview() {
     const containerWidth = previewArea.clientWidth || 600;
     const totalPages = pdf.numPages;
 
+    // Clear previous PDF canvases only (keep spinner if present)
     previewArea.innerHTML = '';
     state.previewCanvases = [];
 
@@ -198,8 +202,15 @@ async function renderImagePreview() {
     ctx.drawImage(resultBitmap, 0, 0);
   }
 
-  previewArea.innerHTML = '';
-  previewArea.appendChild(canvas);
+  // Replace old canvas smoothly (keep old visible until new one is ready)
+  const oldCanvas = previewArea.querySelector('canvas');
+  canvas.style.display = 'block';
+  if (oldCanvas) {
+    oldCanvas.replaceWith(canvas);
+  } else {
+    previewArea.innerHTML = '';
+    previewArea.appendChild(canvas);
+  }
   state.previewCanvas = canvas;
 
   bitmap.close();
