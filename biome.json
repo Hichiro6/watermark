@@ -19,6 +19,12 @@
       },
       "suspicious": {
         "noExplicitAny": "off"
+      },
+      "a11y": {
+        "useButtonType": "warn",
+        "useAriaPropsSupportedByRole": "warn",
+        "useSemanticElements": "warn",
+        "noLabelWithoutControl": "warn"
       }
     }
   },

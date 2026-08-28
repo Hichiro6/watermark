@@ -12,10 +12,13 @@ export const test = base.extend({
   // Auto-injected page fixture override
   page: async ({ page }, use) => {
     // Inject localStorage before page loads
-    await page.addInitScript(([{ key, value }]) => {
-      window.localStorage.setItem(key, value);
-    }, [{ key: LANG_STORAGE_KEY, value: 'fr' }]);
-    
+    await page.addInitScript(
+      ([{ key, value }]) => {
+        window.localStorage.setItem(key, value);
+      },
+      [{ key: LANG_STORAGE_KEY, value: 'fr' }],
+    );
+
     await use(page);
   },
 });
