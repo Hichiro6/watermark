@@ -419,11 +419,12 @@ body {
 }
 
 .value-badge {
+  display: inline-block;
   float: right;
   font-weight: 590;
   color: var(--brand-accent);
   font-size: 0.85rem;
-  background: rgba(113, 112, 255, 0.15);
+  background: var(--surface, #191a1b);
   padding: 0.15rem 0.6rem;
   border-radius: 4px;
 }
