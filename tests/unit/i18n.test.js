@@ -2,31 +2,31 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { getCurrentLanguage, LANGUAGES, setLanguage, t } from '../../src/i18n.js';
 
 describe('i18n - Core functions', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     // localStorage.clear() via notre polyfill
     if (typeof localStorage !== 'undefined') {
       localStorage.clear();
     }
-    setLanguage('en');
+    await setLanguage('en');
   });
 
-  afterEach(() => {
-    setLanguage('en');
+  afterEach(async () => {
+    await setLanguage('en');
   });
 
-  it('retourne la bonne langue courante', () => {
-    setLanguage('fr');
+  it('retourne la bonne langue courante', async () => {
+    await setLanguage('fr');
     expect(getCurrentLanguage()).toBe('fr');
   });
 
-  it('traduit les clés basiques en anglais', () => {
-    setLanguage('en');
+  it('traduit les clés basiques en anglais', async () => {
+    await setLanguage('en');
     expect(t('app.title')).toBe('WaterMark — Secure your documents');
     expect(t('btn.download')).toBe('Download');
   });
 
-  it('traduit les clés en français', () => {
-    setLanguage('fr');
+  it('traduit les clés en français', async () => {
+    await setLanguage('fr');
     expect(t('app.title')).toBe('WaterMark — Sécurisez vos documents');
     expect(t('btn.download')).toBe('Télécharger');
   });
@@ -35,15 +35,15 @@ describe('i18n - Core functions', () => {
     expect(t('key.nonexistent')).toBe('key.nonexistent');
   });
 
-  it('gère les paramètres de substitution', () => {
-    setLanguage('en');
+  it('gère les paramètres de substitution', async () => {
+    await setLanguage('en');
     const result = t('page.indicator', { num: 1, total: 10 });
     expect(result).toContain('Page 1');
     expect(result).toContain('of 10');
   });
 
-  it('persiste la langue dans localStorage', () => {
-    setLanguage('de');
+  it('persiste la langue dans localStorage', async () => {
+    await setLanguage('de');
     expect(localStorage.getItem('watermark_lang')).toBe('de');
   });
 });
@@ -70,8 +70,8 @@ describe('i18n - Fallback', () => {
     expect(getCurrentLanguage()).toBe('en');
   });
 
-  it('retourne des textes pour les clés courantes en FR', () => {
-    setLanguage('fr');
+  it('retourne des textes pour les clés courantes en FR', async () => {
+    await setLanguage('fr');
     expect(t('header.tagline')).toBeDefined();
     expect(t('btn.download')).toBe('Télécharger');
   });
