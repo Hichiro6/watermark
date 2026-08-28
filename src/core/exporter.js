@@ -4,9 +4,8 @@
  * canvas.toBlob for images
  */
 
-import { state } from '../state.js';
-import { exportCanvas } from '../core/watermark-renderer.js';
 import { t } from '../i18n.js';
+import { state } from '../state.js';
 
 /**
  * Handle download of watermarked file

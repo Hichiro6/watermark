@@ -3,31 +3,31 @@ import { defineConfig, devices } from '@playwright/test';
 export default defineConfig({
   testDir: './tests/e2e',
   outputDir: './tests/e2e/artifacts',
-  
+
   // Run tests in files in parallel
   fullyParallel: true,
-  
+
   // Fail the build on .only
   forbidOnly: !!process.env.CI,
-  
+
   // Retry on CI only
   retries: process.env.CI ? 2 : 0,
-  
+
   // Workers: undefined = auto (optimal for local), 1 on CI
   workers: process.env.CI ? 1 : undefined,
-  
+
   // Reporter configuration
   reporter: [
     ['html', { outputFolder: './tests/e2e/results/report', open: 'never' }],
     ['line'],
     ['list'],
   ],
-  
+
   timeout: 60 * 1000,
   expect: {
     timeout: 10000,
   },
-  
+
   // Shared settings for all tests
   use: {
     baseURL: 'http://localhost:5173',
@@ -43,7 +43,7 @@ export default defineConfig({
     // Headless by default
     headless: true,
   },
-  
+
   // Test projects — chromium only (guaranteed installed)
   projects: [
     {
@@ -51,7 +51,7 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'] },
     },
   ],
-  
+
   // Start local dev server before tests
   webServer: {
     command: 'npm run dev',

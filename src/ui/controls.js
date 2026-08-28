@@ -3,10 +3,10 @@
  * Handles watermark text, sliders, color picker, position selector, presets
  */
 
-import { state, updateOptions } from '../state.js';
-import { PRESETS } from '../presets.js';
-import { getCurrentLanguage, getPresetText } from '../i18n.js';
 import { getLocale } from '../core/watermark-renderer.js';
+import { getCurrentLanguage, getPresetText } from '../i18n.js';
+import { PRESETS } from '../presets.js';
+import { state, updateOptions } from '../state.js';
 import { debouncedPreview } from './preview.js';
 
 /** @type {Record<string, HTMLElement>} */
@@ -80,7 +80,9 @@ function bindControlEvents() {
   if (elements.colorPicker) {
     elements.colorPicker.querySelectorAll('.color-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
-        elements.colorPicker.querySelectorAll('.color-btn').forEach((b) => b.classList.remove('active'));
+        elements.colorPicker.querySelectorAll('.color-btn').forEach((b) => {
+          b.classList.remove('active');
+        });
         btn.classList.add('active');
         updateOptions({ color: btn.dataset.color });
         debouncedPreview();
@@ -92,7 +94,9 @@ function bindControlEvents() {
   if (elements.positionControl) {
     elements.positionControl.querySelectorAll('.seg-btn').forEach((btn) => {
       btn.addEventListener('click', () => {
-        elements.positionControl.querySelectorAll('.seg-btn').forEach((b) => b.classList.remove('active'));
+        elements.positionControl.querySelectorAll('.seg-btn').forEach((b) => {
+          b.classList.remove('active');
+        });
         btn.classList.add('active');
         updateOptions({ position: btn.dataset.position });
         debouncedPreview();
@@ -132,7 +136,9 @@ function bindPresetButtons() {
   if (!elements.presetsGrid) return;
   elements.presetsGrid.querySelectorAll('.preset-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
-      elements.presetsGrid.querySelectorAll('.preset-btn').forEach((b) => b.classList.remove('active'));
+      elements.presetsGrid.querySelectorAll('.preset-btn').forEach((b) => {
+        b.classList.remove('active');
+      });
       btn.classList.add('active');
 
       const preset = PRESETS.find((p) => p.id === btn.dataset.preset);

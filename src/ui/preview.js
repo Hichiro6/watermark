@@ -6,14 +6,14 @@
 
 import * as pdfjsLib from 'pdfjs-dist';
 import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
-import { state } from '../state.js';
-import { applyWatermarkToContext, getLocale } from '../core/watermark-renderer.js';
 import {
+  applyWatermarkToBitmap,
   initRenderWorker,
   renderImageWithWatermark,
-  applyWatermarkToBitmap,
 } from '../core/render-worker-client.js';
+import { getLocale } from '../core/watermark-renderer.js';
 import { getCurrentLanguage, t } from '../i18n.js';
+import { state } from '../state.js';
 
 let isPreviewing = false;
 let previewToken = 0;

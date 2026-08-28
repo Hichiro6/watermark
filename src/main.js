@@ -1,6 +1,6 @@
 /**
  * WaterMark — Application Bootstrap
- * 
+ *
  * Entry point only — delegates to focused modules:
  * - state.js       : centralized state management
  * - ui/dropzone.js : file drag-and-drop + selection
@@ -10,11 +10,11 @@
  */
 
 import '../styles/main.css';
-import { initI18n } from './i18n.js';
-import { initPdfWorker, debouncedPreview } from './ui/preview.js';
-import { initDropzone, resetDropzone } from './ui/dropzone.js';
-import { initControls, renderPresets, setDefaultWatermarkText } from './ui/controls.js';
 import { initExport } from './core/exporter.js';
+import { initI18n } from './i18n.js';
+import { initControls, renderPresets, setDefaultWatermarkText } from './ui/controls.js';
+import { initDropzone, resetDropzone } from './ui/dropzone.js';
+import { initPdfWorker } from './ui/preview.js';
 
 /**
  * Application initialization

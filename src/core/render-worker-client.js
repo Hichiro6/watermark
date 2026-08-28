@@ -1,11 +1,11 @@
 /**
  * Render Worker client — main thread interface for OffscreenCanvas rendering
- * 
+ *
  * Detects OffscreenCanvas support and falls back to synchronous rendering
  * on the main thread if not available (older browsers).
  */
 
-import { applyWatermarkToContext, getLocale } from './watermark-renderer.js';
+import { applyWatermarkToContext } from './watermark-renderer.js';
 
 let worker = null;
 let useWorker = false;
@@ -53,10 +53,9 @@ export function renderImageWithWatermark(bitmap, width, height, options, locale)
         }
       };
       worker.addEventListener('message', handler);
-      worker.postMessage(
-        { type: 'render-image', bitmap, width, height, options, locale },
-        [bitmap],
-      );
+      worker.postMessage({ type: 'render-image', bitmap, width, height, options, locale }, [
+        bitmap,
+      ]);
     });
   }
 
@@ -86,10 +85,9 @@ export function applyWatermarkToBitmap(bitmap, width, height, options, locale) {
         }
       };
       worker.addEventListener('message', handler);
-      worker.postMessage(
-        { type: 'apply-watermark', bitmap, width, height, options, locale },
-        [bitmap],
-      );
+      worker.postMessage({ type: 'apply-watermark', bitmap, width, height, options, locale }, [
+        bitmap,
+      ]);
     });
   }
 

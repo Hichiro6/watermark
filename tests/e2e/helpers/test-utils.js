@@ -4,7 +4,7 @@
  * et attendre que le workspace devienne visible.
  */
 
-import path from 'path';
+import path from 'node:path';
 
 const fixturesDir = path.join(process.cwd(), 'tests/e2e/fixtures');
 
@@ -25,7 +25,7 @@ export async function uploadTestFile(page, filename = 'test-document.pdf') {
 
   // Wait for workspace to appear
   await page.waitForSelector('#workspace:not([hidden])', { timeout: 10000 });
-  
+
   // Wait for canvas to render (especially important for PDFs with multiple pages)
   await waitForCanvasRender(page);
 
@@ -46,28 +46,24 @@ export async function waitForCanvasRender(page, timeout = 15000) {
   // disappear, indicating the re-render has begun.
   // The app uses a 300ms debounce, so we give it 500ms to kick in.
   try {
-    await page.waitForFunction(
-      () => document.querySelectorAll('canvas').length === 0,
-      null,
-      { timeout: 500 }
-    );
+    await page.waitForFunction(() => document.querySelectorAll('canvas').length === 0, null, {
+      timeout: 500,
+    });
   } catch {
     // Canvases didn't disappear — either no re-render was triggered,
     // or the render was instant. Continue to wait for canvases to exist.
   }
 
   // Wait for at least one canvas to be present
-  await page.waitForFunction(
-    () => document.querySelectorAll('canvas').length > 0,
-    null,
-    { timeout }
-  );
+  await page.waitForFunction(() => document.querySelectorAll('canvas').length > 0, null, {
+    timeout,
+  });
 
   // Wait for canvas count to stabilize (handles multi-page PDFs)
   await page.waitForFunction(
     () => {
       const count = document.querySelectorAll('canvas').length;
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const prev = count;
         setTimeout(() => {
           resolve(document.querySelectorAll('canvas').length === prev);
@@ -75,7 +71,7 @@ export async function waitForCanvasRender(page, timeout = 15000) {
       });
     },
     null,
-    { timeout }
+    { timeout },
   );
 }
 

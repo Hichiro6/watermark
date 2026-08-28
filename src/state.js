@@ -36,7 +36,9 @@ export function subscribe(callback) {
  * Notify subscribers of state change
  */
 function notify() {
-  state.subscribers.forEach((cb) => cb(state));
+  state.subscribers.forEach((cb) => {
+    cb(state);
+  });
 }
 
 /**

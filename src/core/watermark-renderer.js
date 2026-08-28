@@ -144,7 +144,7 @@ function renderBottom(ctx, width, height, lines, lineHeight, baseDim) {
 /**
  * Render tiled watermark (repeated pattern)
  */
-function renderTile(ctx, width, height, lines, finalFontSize, baseDim, rotation) {
+function renderTile(ctx, width, height, lines, finalFontSize, _baseDim, rotation) {
   const tileSize = Math.min(width, height) / 4;
   const fontSizeTile = finalFontSize / 2;
 

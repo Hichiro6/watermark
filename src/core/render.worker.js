@@ -1,9 +1,9 @@
 /**
  * Render Worker — OffscreenCanvas watermark rendering
- * 
+ *
  * Receives image data + watermark options, renders on OffscreenCanvas,
  * and transfers back the result. Keeps the main thread free for UI.
- * 
+ *
  * Supported messages:
  * - { type: 'render-image', bitmap, width, height, options, locale }
  *   → returns { type: 'rendered', bitmap, width, height }
@@ -11,7 +11,7 @@
  *   → returns { type: 'watermarked', bitmap, width, height }
  */
 
-import { applyWatermarkToContext, getLocale } from './watermark-renderer.js';
+import { applyWatermarkToContext } from './watermark-renderer.js';
 
 self.onmessage = async (e) => {
   const { type } = e.data;
@@ -46,10 +46,7 @@ async function handleRenderImage({ bitmap, width, height, options, locale }) {
     // Transfer back as ImageBitmap
     const resultBitmap = canvas.transferToImageBitmap();
 
-    self.postMessage(
-      { type: 'rendered', bitmap: resultBitmap, width, height },
-      [resultBitmap],
-    );
+    self.postMessage({ type: 'rendered', bitmap: resultBitmap, width, height }, [resultBitmap]);
   } catch (error) {
     self.postMessage({ type: 'error', error: error.message });
   }
@@ -73,10 +70,7 @@ async function handleApplyWatermark({ bitmap, width, height, options, locale }) 
     // Transfer back
     const resultBitmap = canvas.transferToImageBitmap();
 
-    self.postMessage(
-      { type: 'watermarked', bitmap: resultBitmap, width, height },
-      [resultBitmap],
-    );
+    self.postMessage({ type: 'watermarked', bitmap: resultBitmap, width, height }, [resultBitmap]);
   } catch (error) {
     self.postMessage({ type: 'error', error: error.message });
   }

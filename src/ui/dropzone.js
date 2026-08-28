@@ -3,7 +3,7 @@
  * Handles file drag-and-drop, click, and keyboard accessibility
  */
 
-import { state, setFile, clearFile } from '../state.js';
+import { clearFile, setFile } from '../state.js';
 import { renderPreview } from './preview.js';
 
 /** @type {HTMLElement | null} */

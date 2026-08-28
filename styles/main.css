@@ -1,6 +1,6 @@
 /**
  * WaterMark — Design System Unifié (Linear-inspired)
- * 
+ *
  * Principes :
  * - Minimalisme sombre moderne
  * - Contrastes élevés (WCAG AA+)
@@ -16,42 +16,42 @@
   --bg-panel: #0f1011;
   --bg-surface: #191a1b;
   --bg-elevated: #28282c;
-  
+
   --text-primary: #f7f8f8;
   --text-secondary: #d0d6e0;
   --text-tertiary: #8a8f98;
   --text-quaternary: #62666d;
-  
+
   --brand-indigo: #5e6ad2;
   --brand-accent: #7170ff;
   --brand-hover: #828fff;
   --brand-gradient: linear-gradient(135deg, #5e6ad2 0%, #8b5cf6 100%);
-  
+
   --border-subtle: rgba(255, 255, 255, 0.05);
   --border-standard: rgba(255, 255, 255, 0.08);
   --border-prominent: #23252a;
-  
+
   --success: #27a644;
   --danger: #e84545;
   --warning: #ffb020;
-  
+
   /* Accessibilité */
   --touch-target-min: 48px;
   --base-font-size: 18px;
   --line-height-relaxed: 1.6;
-  
+
   /* Radius */
   --radius-sm: 6px;
   --radius-md: 8px;
   --radius-lg: 12px;
   --radius-xl: 16px;
   --radius-pill: 9999px;
-  
+
   /* Ombres */
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.15);
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.25);
   --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.35);
-  
+
   /* Transitions */
   --transition-fast: 0.15s ease;
   --transition-base: 0.25s ease;
@@ -64,16 +64,16 @@
     --bg-panel: #f3f4f5;
     --bg-surface: #ffffff;
     --bg-elevated: #ffffff;
-    
+
     --text-primary: #171717;
     --text-secondary: #444444;
     --text-tertiary: #6b6b6b;
     --text-quaternary: #8c8c8c;
-    
+
     --border-subtle: rgba(0, 0, 0, 0.08);
     --border-standard: rgba(0, 0, 0, 0.12);
     --border-prominent: #d0d6e0;
-    
+
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
     --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
     --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
@@ -81,7 +81,9 @@
 }
 
 /* ===== Reset & Base ===== */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -93,7 +95,9 @@ html {
 }
 
 body {
-  font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-family:
+    ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial,
+    sans-serif;
   background: var(--bg-marketing);
   color: var(--text-primary);
   line-height: var(--line-height-relaxed);
@@ -110,10 +114,12 @@ body {
 
 /* Réduction des animations */
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
   }
 }
 
@@ -122,7 +128,6 @@ body {
   text-align: center;
   padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2rem) 1.5rem;
   border-bottom: 1px solid var(--border-subtle);
-  background: var(--bg-panel);
   position: sticky;
   top: 0;
   z-index: 100;
@@ -338,7 +343,9 @@ body {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  transition: color var(--transition-fast), transform var(--transition-fast);
+  transition:
+    color var(--transition-fast),
+    transform var(--transition-fast);
 }
 
 .control-group__title:hover {
@@ -355,7 +362,10 @@ body {
 }
 
 .control-group__body {
-  transition: max-height var(--transition-base), opacity var(--transition-base), padding var(--transition-base);
+  transition:
+    max-height var(--transition-base),
+    opacity var(--transition-base),
+    padding var(--transition-base);
   max-height: 2000px;
   opacity: 1;
 }
@@ -404,7 +414,8 @@ body {
   border-radius: 4px;
   font-size: 0.8rem;
   color: var(--brand-accent);
-  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Consolas, monospace;
+  font-family:
+    ui-monospace, "SF Mono", "Cascadia Code", "Segoe UI Mono", Menlo, Consolas, monospace;
 }
 
 .value-badge {
@@ -418,7 +429,8 @@ body {
 }
 
 /* ===== Inputs ===== */
-textarea, input[type="text"] {
+textarea,
+input[type="text"] {
   width: 100%;
   padding: 0.875rem 1rem;
   background: var(--bg-surface);
@@ -429,16 +441,20 @@ textarea, input[type="text"] {
   font-family: inherit;
   resize: vertical;
   min-height: 60px;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
-textarea:focus, input[type="text"]:focus {
+textarea:focus,
+input[type="text"]:focus {
   outline: none;
   border-color: var(--brand-accent);
   box-shadow: 0 0 0 3px rgba(113, 112, 255, 0.15);
 }
 
-textarea::placeholder, input::placeholder {
+textarea::placeholder,
+input::placeholder {
   color: var(--text-tertiary);
 }
 
@@ -535,7 +551,9 @@ input[type="range"]::-moz-range-thumb {
 
 .color-btn.active {
   border-color: var(--text-primary);
-  box-shadow: 0 0 0 3px var(--bg-panel), var(--shadow-md);
+  box-shadow:
+    0 0 0 3px var(--bg-panel),
+    var(--shadow-md);
 }
 
 /* ===== Presets Grid ===== */
@@ -650,7 +668,8 @@ input[type="range"]::-moz-range-thumb {
   border-radius: 4px;
   font-size: 0.85rem;
   color: var(--brand-accent);
-  font-family: ui-monospace, 'SF Mono', 'Cascadia Code', 'Segoe UI Mono', Menlo, Consolas, monospace;
+  font-family:
+    ui-monospace, "SF Mono", "Cascadia Code", "Segoe UI Mono", Menlo, Consolas, monospace;
 }
 
 /* ===== Spinner ===== */
@@ -664,7 +683,9 @@ input[type="range"]::-moz-range-thumb {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* ===== File Input Hidden ===== */
@@ -681,27 +702,27 @@ input[type="range"]::-moz-range-thumb {
   .controls {
     padding: 1.25rem;
   }
-  
+
   .control-row--2col {
     grid-template-columns: 1fr;
   }
-  
+
   .presets {
     grid-template-columns: 1fr;
   }
-  
+
   .workspace__preview-actions {
     flex-direction: column-reverse;
   }
-  
+
   .btn {
     width: 100%;
   }
-  
+
   .header {
     padding: 1.5rem 1rem;
   }
-  
+
   .dropzone {
     margin: 1.5rem auto;
   }
@@ -714,7 +735,7 @@ input[type="range"]::-moz-range-thumb {
     --border-standard: rgba(255, 255, 255, 0.5);
     --text-tertiary: #b0b0b0;
   }
-  
+
   .seg-btn.active,
   .color-btn.active,
   .preset-btn.active {
@@ -805,5 +826,5 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .footer__bmc:hover {
-  color: #ff813f !important;
+  color: #ff813f;
 }
