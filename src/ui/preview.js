@@ -21,10 +21,7 @@ let previewToken = 0;
  * Initialize PDF.js worker and render worker
  */
 export function initPdfWorker() {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
-    '/pdf.worker.min.mjs',
-    import.meta.url
-  ).href;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('/pdf.worker.min.mjs', import.meta.url).href;
   initRenderWorker();
 }
 
@@ -94,7 +91,8 @@ async function renderPdfPreview() {
         state.fileBlob = new Blob([await state.file.arrayBuffer()], { type: state.file.type });
       }
       const arrayBuffer = await state.fileBlob.arrayBuffer();
-      state.pdfDocument = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise;
+      state.pdfDocument = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false })
+        .promise;
     }
     const pdf = state.pdfDocument;
 
