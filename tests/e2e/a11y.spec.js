@@ -1,13 +1,13 @@
-import AxeBuilder from '@axe-core/playwright';
-import { expect, test } from '@playwright/test';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import AxeBuilder from '@axe-core/playwright';
+import { expect, test } from '@playwright/test';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const fixturesDir = path.join(__dirname, 'fixtures');
 
 // Helper: create a small PNG using canvas in the browser
-async function createTestImage(page, filename) {
+async function createTestImage(_page, filename) {
   const filePath = path.join(fixturesDir, filename);
   const { execSync } = await import('node:child_process');
   try {
