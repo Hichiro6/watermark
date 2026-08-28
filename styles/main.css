@@ -128,10 +128,6 @@ body {
   text-align: center;
   padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2rem) 1.5rem;
   border-bottom: 1px solid var(--border-subtle);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  backdrop-filter: blur(12px);
   background: color-mix(in srgb, var(--bg-panel) 95%, transparent);
 }
 
