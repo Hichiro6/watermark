@@ -5,7 +5,6 @@
  */
 
 import * as pdfjsLib from 'pdfjs-dist';
-import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 import {
   applyWatermarkToBitmap,
   initRenderWorker,
@@ -22,7 +21,10 @@ let previewToken = 0;
  * Initialize PDF.js worker and render worker
  */
 export function initPdfWorker() {
-  pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+    '/pdf.worker.min.mjs',
+    import.meta.url
+  ).href;
   initRenderWorker();
 }
 
@@ -86,11 +88,15 @@ async function renderPdfPreview() {
   if (!previewArea) return;
 
   try {
-    if (!state.fileBlob) {
-      state.fileBlob = new Blob([await state.file.arrayBuffer()], { type: state.file.type });
+    // Reuse cached PDF document to avoid re-fetching/re-parsing on every slider change
+    if (!state.pdfDocument) {
+      if (!state.fileBlob) {
+        state.fileBlob = new Blob([await state.file.arrayBuffer()], { type: state.file.type });
+      }
+      const arrayBuffer = await state.fileBlob.arrayBuffer();
+      state.pdfDocument = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise;
     }
-    const arrayBuffer = await state.fileBlob.arrayBuffer();
-    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer, isEvalSupported: false }).promise;
+    const pdf = state.pdfDocument;
 
     const containerWidth = previewArea.clientWidth || 600;
     const totalPages = pdf.numPages;

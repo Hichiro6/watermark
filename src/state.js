@@ -7,6 +7,7 @@ export const state = {
   file: null,
   fileUrl: null,
   fileBlob: null, // cached Blob for PDF re-renders
+  pdfDocument: null, // cached parsed PDF document
   previewCanvas: null, // for images
   previewCanvases: [], // for PDFs
   options: {
@@ -69,6 +70,10 @@ export function setFile(file, fileUrl, fileBlob) {
 export function clearFile() {
   if (state.fileUrl) {
     URL.revokeObjectURL(state.fileUrl);
+  }
+  if (state.pdfDocument) {
+    state.pdfDocument.destroy();
+    state.pdfDocument = null;
   }
   state.file = null;
   state.fileUrl = null;
